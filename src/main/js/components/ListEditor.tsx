@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Input, Row, Col } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 export type ListProps<T> = {
   name?: string;
@@ -17,12 +17,11 @@ export const ListEditor: React.FC<ListProps<any>> = ({ name, list, update }: Lis
     update(newList);
   };
   const addItemAsDict = () => {
-
     const indexes = Object.keys(list || {})
       .filter((val) => val.startsWith('new'))
       .map((val) => parseInt(val.replace('new', '')));
 
-    const index = Math.max(0,...indexes) + 1;
+    const index = Math.max(0, ...indexes) + 1;
 
     console.log(indexes);
 
@@ -48,17 +47,29 @@ const asList = (list, update) => {
     newList[index] = newList[index].split('=')[0] + '=' + value;
     update(newList);
   };
+  const remove = (index) => () => {
+    const newList = list.filter((element, itemIndex) => itemIndex != index);
+    update(newList);
+  };
+
   const eventAdapter = (fun) => {
     return (e) => fun(e.target.value);
   };
+
   return list.map((item, index) => (
     <Input.Group>
       <Row gutter={8}>
         <Col span={16}>
-          <Input placeholder="key" value={item.split('=')[0]} onChange={eventAdapter(updateKey(index))} />
+          <Input addonBefore="key" placeholder="key" value={item.split('=')[0]} onChange={eventAdapter(updateKey(index))} />
         </Col>
         <Col span={8}>
-          <Input placeholder="value" value={item.split('=')[1] || ''} onChange={eventAdapter(updateValue(index))} />
+          <Input
+            addonBefore="value"
+            placeholder="value"
+            value={item.split('=')[1] || ''}
+            onChange={eventAdapter(updateValue(index))}
+            addonAfter={<Button shape="circle" danger onClick={remove(index)} icon={<DeleteOutlined />} />}
+          />
         </Col>
       </Row>
     </Input.Group>
@@ -76,6 +87,11 @@ const asDict = (list, update) => {
     newList[key] = value;
     update(newList);
   };
+  const remove = (key) => () => {
+    const newList = { ...list };
+    delete newList[key];
+    update(newList);
+  };
   const eventAdapter = (fun) => {
     return (e) => fun(e.target.value);
   };
@@ -91,7 +107,12 @@ const asDict = (list, update) => {
                 <Input placeholder="key" value={key} onChange={eventAdapter(updateKey(key))} />
               </Col>
               <Col span={8}>
-                <Input placeholder="value" value={itemValue} onChange={eventAdapter(updateValue(key))} />
+                <Input
+                  placeholder="value"
+                  value={itemValue}
+                  onChange={eventAdapter(updateValue(key))}
+                  addonAfter={<Button shape="circle" danger onClick={remove(key)} icon={<DeleteOutlined />} />}
+                />
               </Col>
             </Row>
           </Input.Group>
