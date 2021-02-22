@@ -10,10 +10,25 @@ export type ListProps<T> = {
 
 export const ListEditor: React.FC<ListProps<any>> = ({ name, list, update }: ListProps<any>) => {
   const addItem = () => {
-    const newList = Array.isArray(list) ? [...list, '='] : { ...list, new: 'value' };
+    Array.isArray(list) ? addItemAsList() : addItemAsDict();
+  };
+  const addItemAsList = () => {
+    const newList = [...list, '='];
     update(newList);
   };
+  const addItemAsDict = () => {
 
+    const indexes = Object.keys(list || {})
+      .filter((val) => val.startsWith('new'))
+      .map((val) => parseInt(val.replace('new', '')));
+
+    const index = Math.max(0,...indexes) + 1;
+
+    console.log(indexes);
+
+    const newList = { ...list, ['new' + index]: 'value' };
+    update(newList);
+  };
   return (
     <>
       {Array.isArray(list) ? asList(list, update) : asDict(list, update)}
@@ -51,13 +66,13 @@ const asList = (list, update) => {
 };
 const asDict = (list, update) => {
   const updateKey = (oldKey) => (newkey) => {
-    const newList = {...list};
+    const newList = { ...list };
     delete newList[oldKey];
     newList[newkey] = list[oldKey];
     update(newList);
   };
   const updateValue = (key) => (value) => {
-    const newList = {...list};
+    const newList = { ...list };
     newList[key] = value;
     update(newList);
   };
@@ -66,19 +81,21 @@ const asDict = (list, update) => {
   };
   return (
     list &&
-    Object.entries(list).map(([key, itemValue]) => {
-      return (
-        <Input.Group>
-          <Row gutter={8}>
-            <Col span={16}>
-              <Input placeholder="key" value={key} onChange={eventAdapter(updateKey(key))} />
-            </Col>
-            <Col span={8}>
-              <Input placeholder="value" value={itemValue} onChange={eventAdapter(updateValue(key))} />
-            </Col>
-          </Row>
-        </Input.Group>
-      );
-    })
+    Object.entries(list)
+      .sort(([key1], [key2]) => key1.localeCompare(key2))
+      .map(([key, itemValue]) => {
+        return (
+          <Input.Group>
+            <Row gutter={8}>
+              <Col span={16}>
+                <Input placeholder="key" value={key} onChange={eventAdapter(updateKey(key))} />
+              </Col>
+              <Col span={8}>
+                <Input placeholder="value" value={itemValue} onChange={eventAdapter(updateValue(key))} />
+              </Col>
+            </Row>
+          </Input.Group>
+        );
+      })
   );
 };
