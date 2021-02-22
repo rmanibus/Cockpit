@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=cockpit
+      - POSTGRES_PASSWORD=cockpit
+      - POSTGRES_DB=cockpit
+    ports:
+      - '5432:5432'
+    volumes:
+      - posgres-data:/var/lib/postgresql/data
+
+volumes:
+  posgres-data:

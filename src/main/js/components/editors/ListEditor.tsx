@@ -22,16 +22,14 @@ export const ListEditor: React.FC<ListProps<any>> = ({ name, list, update }: Lis
       .map((val) => parseInt(val.replace('new', '')));
 
     const index = Math.max(0, ...indexes) + 1;
-
-    console.log(indexes);
-
     const newList = { ...list, ['new' + index]: 'value' };
     update(newList);
   };
   return (
     <>
+      <Button style={{float: 'right'}} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
+      <h2>{name}</h2>
       {Array.isArray(list) ? asList(list, update) : asDict(list, update)}
-      <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
     </>
   );
 };
