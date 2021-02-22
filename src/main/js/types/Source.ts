@@ -1,7 +1,8 @@
-
+import React from 'react';
 export interface SourceType {
     color: string;
     text: string;
+    icon: React.FC;
 }
 export interface SourceTypes {
     [key: string]: SourceType;

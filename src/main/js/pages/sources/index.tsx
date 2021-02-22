@@ -1,7 +1,7 @@
 import React from 'react';
-import { Drawer, message } from 'antd';
+import { Drawer } from 'antd';
 import { SourcesView } from '../../components/views/SourcesView';
-import { SourceForm } from '../../components/forms/SourceForm'
+import { CreateSourceForm } from '../../components/forms/SourceForm'
 import { DataContext } from '../../contexts/DataContext';
 
 const Sources: React.FC = () => {
@@ -31,7 +31,7 @@ const Sources: React.FC = () => {
         visible={visible}
         bodyStyle={{ paddingBottom: 80 }}
       >
-        <SourceForm afterFinish={onClose} />
+        <CreateSourceForm afterFinish={onClose} />
       </Drawer>
       </>
     );

@@ -1,33 +1,66 @@
 import React from 'react';
 import { Form, Input, Button, Select, message } from 'antd';
 import { DataContext } from '../../contexts/DataContext';
-import api from '../../api';
-
+import { sourceTypes } from '../../translations/Source';
+import { Source } from '../../types/Source';
 const { Option } = Select;
 
-type SourceFormProps = {
-  afterFinish: any;
+type EditSourceFormProps = {
+    afterFinish: any;
+    id: string;
 };
 
-export const SourceForm: React.FC<SourceFormProps> = ({ afterFinish }) => {
-  const { create } = React.useContext(DataContext);
-  const onFinish = (values: any) => {
-    create(values)
-      .then(afterFinish)
-      .then(() => message.success('source created !'))
-      .catch(() => message.error('failed to create source !'));
-  };
+export const EditSourceForm: React.FC<EditSourceFormProps> = ({ id, afterFinish }) => {
+    const { get, data, edit } = React.useContext(DataContext);
 
+    React.useEffect(() => {
+        get(id);
+    }, [id])
+    const onFinish = (values: any) => {
+        edit(values)
+        .then(afterFinish)
+        .then(() => message.success('source created !'))
+        .catch(() => message.error('failed to create source !'));
+    };
+
+    return <SourceForm data={data} onFinish={onFinish}/>
+}
+
+type CreateSourceFormProps = {
+    afterFinish: any;
+};
+
+  
+export const CreateSourceForm: React.FC<CreateSourceFormProps> = ({ afterFinish }) => {
+    const { create } = React.useContext(DataContext);
+    const onFinish = (values: any) => {
+      create(values)
+        .then(afterFinish)
+        .then(() => message.success('source created !'))
+        .catch(() => message.error('failed to create source !'));
+    };
+    return <SourceForm onFinish={onFinish}/>
+}
+
+type SourceFormProps = {
+    data?: Source;
+    onFinish: any;
+};
+  
+export const SourceForm: React.FC<SourceFormProps> = ({ data, onFinish }) => {
+
+  let [form] = Form.useForm();
+  React.useEffect(() => {
+    form && data && form.setFieldsValue(data);
+  })
   return (
-    <Form initialValues={{ remember: true }} onFinish={onFinish}>
+    <Form form={form} initialValues={{ remember: true }} onFinish={onFinish}>
       <Form.Item name="name" rules={[{ required: true, message: 'Please input source name!' }]}>
         <Input placeholder="Name" />
       </Form.Item>
       <Form.Item name="type" rules={[{ required: true, message: 'Please input source type!' }]}>
         <Select placeholder="Please select a type">
-          <Option value="GITLAB">Gitlab</Option>
-          <Option value="GITHUB">Github</Option>
-          <Option value="LOCAL">Local</Option>
+            {Object.keys(sourceTypes).map((key) => <Option value={key}>{React.createElement(sourceTypes[key].icon)} {sourceTypes[key].text}</Option>)};
         </Select>
       </Form.Item>
       <Form.Item name="location" rules={[{ required: true, message: 'Please input source location!' }]}>

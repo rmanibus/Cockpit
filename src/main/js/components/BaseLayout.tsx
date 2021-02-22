@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Layout, Menu } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, VideoCameraOutlined, UploadOutlined } from '@ant-design/icons';
+import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, VideoCameraOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Header, Sider, Content } = Layout;
 
@@ -31,7 +31,7 @@ export const BaseLayout: React.FC = ({ children }) => {
           <Menu.Item key="/sources" icon={<VideoCameraOutlined />}>
             Sources
           </Menu.Item>
-          <Menu.Item key="/settings" icon={<UploadOutlined />}>
+          <Menu.Item key="/settings" icon={<SettingOutlined />}>
             Settings
           </Menu.Item>
         </Menu>

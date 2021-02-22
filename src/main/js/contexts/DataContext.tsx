@@ -4,7 +4,9 @@ import api from '../api';
 interface DataContextValue {
     setPath(path: Resource): void;
     create(values: any): Promise<any>;
-    remove(id: string): Promise<any>;
+    edit(values: any, id?: string): Promise<any>;
+    get(id?: string): Promise<any>;
+    remove(id?: string): Promise<any>;
     update(): Promise<any>;
     listData: Array<any>;
     data: any;
@@ -32,6 +34,22 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
 
     };
 
+    const get = (id) => {
+        if(id == null && path.id == null){
+            return Promise.reject("no id set");
+        }
+        return api.get(path.context + "/" + (id || path.id))
+        .then((res) => setData(res.data));
+    };
+
+    const edit = (values, id) => {
+        if(id == null && path.id == null){
+            return Promise.reject("no id set");
+        }
+        return api.put(path.context + "/" + (id || path.id), values)
+        .then(update);
+    };
+
     const remove = (id) => {
         if(id == null && path.id == null){
             return Promise.reject("no id set");
@@ -41,15 +59,18 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
     };
 
     const update = () => {
-        if(path !== null){
-            if(path.id){
-                return api.get(path.context + "/" + path.id)
-                .then((res) => setData(res.data));
-            }
-            return api.get(path.context)
-            .then((res) => setListData(res.data));
+        if(path == null){
+            return Promise.reject("path not set");
         }
-        return Promise.reject("path not set");
+        
+        if(path.id){
+            setListData(null);
+            return api.get(path.context + "/" + path.id)
+            .then((res) => setData(res.data));
+        }
+        setData(null);
+        return api.get(path.context)
+        .then((res) => setListData(res.data));
     };
 
     React.useEffect(() => {
@@ -63,8 +84,10 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
           value={{
             listData,
             data,
-            create,
             update,
+            create,
+            get,
+            edit,
             remove,
             setPath
           }}
