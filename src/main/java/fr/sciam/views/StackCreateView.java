@@ -9,7 +9,7 @@ import java.util.UUID;
 @UpdatableEntityView
 @CreatableEntityView
 @EntityView(StackEntity.class)
-public  interface StackView {
+public  interface StackCreateView {
     
     @IdMapping
     UUID getId();

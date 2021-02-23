@@ -22,8 +22,8 @@ export const EditStackForm: React.FC<EditStackFormProps> = ({ id, afterFinish })
     const onFinish = (values: any) => {
         edit(values)
         .then(afterFinish)
-        .then(() => message.success('source created !'))
-        .catch(() => message.error('failed to create source !'));
+        .then(() => message.success('stack edited !'))
+        .catch(() => message.error('failed to edit stack !'));
     };
 
     return <StackForm data={data} onFinish={onFinish}/>
@@ -57,7 +57,7 @@ export const StackForm: React.FC<StackFormProps> = ({ data, onFinish }) => {
     api.get('sources')
     .then(res => {
         setSources(res.data);
-        form && data && form.setFieldsValue(data);
+        form && data && form.setFieldsValue({...data, source: data.source.id});
     });
   },[form, data])
   return (
@@ -72,7 +72,7 @@ export const StackForm: React.FC<StackFormProps> = ({ data, onFinish }) => {
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Create
+        {data ? 'Edit' : 'Create'} 
         </Button>
       </Form.Item>
     </Form>

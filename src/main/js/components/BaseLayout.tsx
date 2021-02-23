@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Layout, Menu } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, VideoCameraOutlined, SettingOutlined } from '@ant-design/icons';
+import { MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, UserOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Header, Sider, Content } = Layout;
 
@@ -22,13 +22,13 @@ export const BaseLayout: React.FC = ({ children }) => {
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo" />
         <Menu theme="dark" mode="inline" selectedKeys={[router.pathname]} defaultSelectedKeys={['/']} onClick={handleMenuClick}>
-        <Menu.Item key="/" icon={<UserOutlined />}>
+        <Menu.Item key="/" icon={<HomeOutlined />}>
             Home
           </Menu.Item>
-          <Menu.Item key="/stacks" icon={<UserOutlined />}>
+          <Menu.Item key="/stacks" icon={<HddOutlined />}>
             Stacks
           </Menu.Item>
-          <Menu.Item key="/sources" icon={<VideoCameraOutlined />}>
+          <Menu.Item key="/sources" icon={<SubnodeOutlined />}>
             Sources
           </Menu.Item>
           <Menu.Item key="/settings" icon={<SettingOutlined />}>

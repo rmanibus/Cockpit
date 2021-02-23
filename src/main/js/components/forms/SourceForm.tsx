@@ -20,8 +20,8 @@ export const EditSourceForm: React.FC<EditSourceFormProps> = ({ id, afterFinish 
     const onFinish = (values: any) => {
         edit(values)
         .then(afterFinish)
-        .then(() => message.success('source created !'))
-        .catch(() => message.error('failed to create source !'));
+        .then(() => message.success('source edited !'))
+        .catch(() => message.error('failed to edit source !'));
     };
 
     return <SourceForm data={data} onFinish={onFinish}/>
@@ -72,7 +72,7 @@ export const SourceForm: React.FC<SourceFormProps> = ({ data, onFinish }) => {
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Create
+          {data ? 'Edit' : 'Create'} 
         </Button>
       </Form.Item>
     </Form>

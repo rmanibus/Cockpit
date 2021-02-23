@@ -1,7 +1,8 @@
 import React from 'react';
-import { List, Button, Tag, message, Drawer } from 'antd';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { EditSourceForm } from '../forms/SourceForm';
+import { useRouter } from 'next/router';
+import { Table, Button, Tag, message, Drawer, Space } from 'antd';
+import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { EditStackForm } from '../forms/StackForm';
 import { sourceTypes } from '../../translations/Source';
 import { DataContext } from '../../contexts/DataContext';
 import { Stack } from '../../types/Stack';
@@ -11,12 +12,40 @@ type StackViewProps = {
 };
 
 export const StacksView: React.FC<StackViewProps> = ({ addItem }) => {
+  const router = useRouter();
   const { listData } = React.useContext(DataContext);
+  const onCell = (item, rowIndex  ) => {return {onClick: event => router.push('stacks/' + item.id)}};
+  const columns = [
+    {
+      onCell: onCell,
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      onCell: onCell,
+      title: 'Source',
+      key: 'source',
+      dataIndex: 'source',
+      render: (source) => (
+        <Tag color={sourceTypes[source.type].color}>
+          {React.createElement(sourceTypes[source.type].icon)} {sourceTypes[source.type].text}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, item) => <StackItem item={item} />,
+    },
+  ];
+
   return (
     <>
       <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
       <h2>Stacks</h2>
-      <List itemLayout="horizontal" dataSource={listData} renderItem={(item) => <StackItem item={item} />} />
+      <Table columns={columns} dataSource={listData} />
     </>
   );
 };
@@ -29,8 +58,8 @@ export const StackItem: React.FC<StackItemProps> = ({ item }) => {
 
   const [visible, setVisible] = React.useState(false);
   const closeDrawer = () => {
-      setVisible(false);
-  }
+    setVisible(false);
+  };
 
   const onRemove = () => {
     remove(item.id)
@@ -41,23 +70,14 @@ export const StackItem: React.FC<StackItemProps> = ({ item }) => {
     setVisible(true);
   };
   return (
-    <List.Item>
-      <List.Item.Meta
-        onClick={onEdit}
-        title={
-          <>
-            <Tag color={sourceTypes[item.source.type].color}>
-              {React.createElement(sourceTypes[item.source.type].icon)} {sourceTypes[item.source.type].text}
-            </Tag>
-            {item.name}
-          </>
-        }
-        description={'description'}
-      />
-      <Button shape="circle" danger onClick={onRemove} icon={<DeleteOutlined />} />
-      <Drawer title={"Edit Source " + item.name } width={720} onClose={closeDrawer} destroyOnClose visible={visible} bodyStyle={{ paddingBottom: 80 }}>
-          <EditSourceForm afterFinish={closeDrawer} id={item.id} />
+    <>
+      <Space size="middle">
+        <Button shape="circle" onClick={onEdit} icon={< EditOutlined/>} />
+        <Button shape="circle" danger onClick={onRemove} icon={<DeleteOutlined />} />
+      </Space>
+      <Drawer title={'Edit Source ' + item.name} width={720} onClose={closeDrawer} destroyOnClose visible={visible} bodyStyle={{ paddingBottom: 80 }}>
+        <EditStackForm afterFinish={closeDrawer} id={item.id} />
       </Drawer>
-    </List.Item>
+    </>
   );
 };
