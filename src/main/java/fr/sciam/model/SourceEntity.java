@@ -3,14 +3,16 @@ package fr.sciam.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(of = {}, callSuper=true)
 public class SourceEntity extends BaseUuidEntity {
 
     @Enumerated(EnumType.STRING)
@@ -22,6 +24,9 @@ public class SourceEntity extends BaseUuidEntity {
     @JsonIgnore()
     @Column(length = 255)
     String secret;
+    @JsonIgnore()
+    @OneToMany(mappedBy = "source", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    Set<StackEntity> stacks;
 
     public enum SourceType {
         GITLAB,GITHUB,LOCAL

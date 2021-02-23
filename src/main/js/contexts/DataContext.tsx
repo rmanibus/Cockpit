@@ -7,13 +7,15 @@ interface DataContextValue {
     edit(values: any, id?: string): Promise<any>;
     get(id?: string): Promise<any>;
     remove(id?: string): Promise<any>;
-    update(): Promise<any>;
+    refresh(): Promise<any>;
+    clearData(): void;
+    clearListData(): void;
     listData: Array<any>;
     data: any;
+    type: string;
 }
 
 export const DataContext = React.createContext<DataContextValue>(null);
-
 interface DataContextProviderProps {
     children: React.ReactNode;
 }
@@ -26,11 +28,12 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
 
     const [path, setPath] = React.useState<Resource>(null);
     const [listData, setListData] = React.useState([]);
+    const [type, setType] = React.useState("");
     const [data, setData] = React.useState(null);
 
     const create = (values) => {
         return api.post(path.context, values)
-        .then(update);
+        .then(refresh);
 
     };
 
@@ -47,7 +50,7 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
             return Promise.reject("no id set");
         }
         return api.put(path.context + "/" + (id || path.id), values)
-        .then(update);
+        .then(refresh);
     };
 
     const remove = (id) => {
@@ -55,10 +58,10 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
             return Promise.reject("no id set");
         }
         return api.delete(path.context + "/" + (id || path.id))
-        .then(update);
+        .then(refresh);
     };
 
-    const update = () => {
+    const refresh = () => {
         if(path == null){
             return Promise.reject("path not set");
         }
@@ -66,30 +69,45 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
         if(path.id){
             setListData(null);
             return api.get(path.context + "/" + path.id)
-            .then((res) => setData(res.data));
+            .then((res) => {
+                setData(res.data);
+                setType(path.context.slice(0, -1));
+            });
         }
         setData(null);
         return api.get(path.context)
-        .then((res) => setListData(res.data));
+        .then((res) => {
+            setListData(res.data);
+            setType("Array<" + path.context.slice(0, -1) + ">");
+        });
     };
 
+    const clearData = () => {
+        setData(null);
+    }
+    const clearListData = () => {
+        setListData(null);
+    }
     React.useEffect(() => {
         if(path){
-            update();
+            refresh();
         }
     }, [path]);
 
     return (
         <DataContext.Provider
           value={{
+            type,
             listData,
             data,
-            update,
+            refresh,
             create,
             get,
             edit,
             remove,
-            setPath
+            setPath,
+            clearData,
+            clearListData
           }}
         >
           {children}

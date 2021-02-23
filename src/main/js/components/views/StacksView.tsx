@@ -4,25 +4,27 @@ import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { EditSourceForm } from '../forms/SourceForm';
 import { sourceTypes } from '../../translations/Source';
 import { DataContext } from '../../contexts/DataContext';
-import { Source } from '../../types/Source';
+import { Stack } from '../../types/Stack';
 
-type SourcesViewProps = {
+type StackViewProps = {
   addItem: any;
 };
-export const SourcesView: React.FC<SourcesViewProps> = ({ addItem }) => {
+
+export const StacksView: React.FC<StackViewProps> = ({ addItem }) => {
   const { listData } = React.useContext(DataContext);
   return (
     <>
       <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
-      <h2>Sources</h2>
-      <List itemLayout="horizontal" dataSource={listData} renderItem={(item) => <SourceItem item={item} />} />
+      <h2>Stacks</h2>
+      <List itemLayout="horizontal" dataSource={listData} renderItem={(item) => <StackItem item={item} />} />
     </>
   );
 };
-type SourceItemProps = {
-  item: Source;
+
+type StackItemProps = {
+  item: Stack;
 };
-export const SourceItem: React.FC<SourceItemProps> = ({ item }) => {
+export const StackItem: React.FC<StackItemProps> = ({ item }) => {
   const { remove } = React.useContext(DataContext);
 
   const [visible, setVisible] = React.useState(false);
@@ -44,13 +46,13 @@ export const SourceItem: React.FC<SourceItemProps> = ({ item }) => {
         onClick={onEdit}
         title={
           <>
-            <Tag color={sourceTypes[item.type].color}>
-              {React.createElement(sourceTypes[item.type].icon)} {sourceTypes[item.type].text}
+            <Tag color={sourceTypes[item.source.type].color}>
+              {React.createElement(sourceTypes[item.source.type].icon)} {sourceTypes[item.source.type].text}
             </Tag>
             {item.name}
           </>
         }
-        description={'location: ' + item.location}
+        description={'description'}
       />
       <Button shape="circle" danger onClick={onRemove} icon={<DeleteOutlined />} />
       <Drawer title={"Edit Source " + item.name } width={720} onClose={closeDrawer} destroyOnClose visible={visible} bodyStyle={{ paddingBottom: 80 }}>

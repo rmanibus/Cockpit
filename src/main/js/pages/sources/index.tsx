@@ -5,8 +5,8 @@ import { CreateSourceForm } from '../../components/forms/SourceForm'
 import { DataContext } from '../../contexts/DataContext';
 
 const Sources: React.FC = () => {
+    const { setPath, type } = React.useContext(DataContext);
     const [visible, setVisible] = React.useState(false);
-
     const addItem = () => {
         setVisible(true);
     }
@@ -15,15 +15,13 @@ const Sources: React.FC = () => {
         setVisible(false);
     }
 
-    const { setPath } = React.useContext(DataContext);
-  
     React.useEffect(() => {
         setPath({context:'sources'});
     }, []);
 
     return(
         <>
-        <SourcesView addItem={addItem}/>
+        {type === "Array<source>" && <SourcesView addItem={addItem}/>}
         <Drawer
         title="Create a new Source"
         width={720}
