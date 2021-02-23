@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import yaml from 'js-yaml';
 import { DockerStack } from '../../../types/DockerStack';
-import { ServiceEditor } from '../../../components/editors/ServiceEditor';
+import { StackView } from '../../../components/views/StackView';
 import api from '../../../api';
 
 const Stack: React.FC = () => {
@@ -33,10 +33,7 @@ const Stack: React.FC = () => {
 
   return (
     <>
-      {stack &&
-        Object.entries(stack.services).map(([key, value]) => {
-          return <ServiceEditor update={updateService(key)} name={key} service={value} />;
-        })}
+      {stack && <StackView stackId={stackId} stack={stack} />}
     </>
   );
 };
