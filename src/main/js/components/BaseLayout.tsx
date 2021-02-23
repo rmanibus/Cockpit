@@ -1,11 +1,14 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Breadcrumb } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, UserOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
 
 const { Header, Sider, Content } = Layout;
 
-export const BaseLayout: React.FC = ({ children }) => {
+type BaseLayoutProps = {
+  breadCrumbs: Array<string>;
+};
+export const BaseLayout: React.FC<BaseLayoutProps> = ({ breadCrumbs, children }) => {
   const router = useRouter();
   const [collapsed, setCollapsed] = React.useState(false);
 
@@ -16,13 +19,13 @@ export const BaseLayout: React.FC = ({ children }) => {
   const handleMenuClick = (e) => {
     router.push(e.key);
   };
-
+  console.log(breadCrumbs);
   return (
     <Layout style={{ height: '100vh', width: '100%' }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo" />
         <Menu theme="dark" mode="inline" selectedKeys={[router.pathname]} defaultSelectedKeys={['/']} onClick={handleMenuClick}>
-        <Menu.Item key="/" icon={<HomeOutlined />}>
+          <Menu.Item key="/" icon={<HomeOutlined />}>
             Home
           </Menu.Item>
           <Menu.Item key="/stacks" icon={<HddOutlined />}>
@@ -52,6 +55,7 @@ export const BaseLayout: React.FC = ({ children }) => {
             overflow: 'auto',
           }}
         >
+          <Breadcrumb>{breadCrumbs && breadCrumbs.map((value) => <Breadcrumb.Item key={value}>{value}</Breadcrumb.Item>)}</Breadcrumb>
           {children}
         </Content>
       </Layout>

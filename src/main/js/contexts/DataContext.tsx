@@ -1,7 +1,7 @@
 import React from 'react';
 import api from '../api';
 
-interface DataContextValue {
+export interface DataContextValue {
     setPath(path: Resource): void;
     create(values: any): Promise<any>;
     edit(values: any, id?: string): Promise<any>;

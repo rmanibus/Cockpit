@@ -1,16 +1,14 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Table, Button, Space } from 'antd';
-import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { Stack } from '../../types/Stack';
-import { DockerStack } from '../../types/DockerStack';
+import { StackContext, StackContextValue } from '../../contexts/StackContext';
 
-type StackViewProps = {
-    stackId: string
-    stack: DockerStack
-};
 
-export const StackView: React.FC<StackViewProps> = ({stackId, stack}) => {
+export const StackView: React.FC = () => {
+  const { stack, stackId } = React.useContext<StackContextValue>(StackContext);
+
   const router = useRouter();
   const onCell = (item, rowIndex  ) => {return {onClick: event => router.push('/stacks/' + stackId + '/' + item.name)}};
   const columns = [
@@ -27,7 +25,6 @@ export const StackView: React.FC<StackViewProps> = ({stackId, stack}) => {
       render: (text, item) => <ServiceItemActions item={item} />,
     },
   ];
-
 
   return (
     <>

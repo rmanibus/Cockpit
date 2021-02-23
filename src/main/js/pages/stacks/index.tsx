@@ -3,8 +3,9 @@ import { Drawer } from 'antd';
 import { StacksView } from '../../components/views/StacksView';
 import { CreateStackForm } from '../../components/forms/StackForm'
 import { DataContext } from '../../contexts/DataContext';
+import { PageProps } from '../../types/Props';
 
-const Stacks: React.FC = () => {
+const Stacks: React.FC<PageProps> = ({setBreadCrumbs}) => {
     const { setPath, type } = React.useContext(DataContext);
     const [visible, setVisible] = React.useState(false);
 
@@ -16,8 +17,8 @@ const Stacks: React.FC = () => {
         setVisible(false);
     }
 
-  
     React.useEffect(() => {
+        setBreadCrumbs(["home", "stacks"])
         setPath({context:'stacks'});
     }, []);
 
