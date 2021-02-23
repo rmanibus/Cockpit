@@ -1,12 +1,12 @@
 import React from 'react';
 import { ServiceEditor } from '../../../../components/editors/ServiceEditor';
 import { StackContext, StackContextValue } from '../../../../contexts/StackContext';
-import { PageProps } from '../../../../types/Props';
 import { DataContext, DataContextValue } from '../../../../contexts/DataContext';
+import { PageProps } from '../../../../types/Props';
 
 const Service: React.FC<PageProps> = ({setHeader}) => {
     const { data, type } = React.useContext<DataContextValue>(DataContext);
-    const { stack, serviceId, updateService } = React.useContext<StackContextValue>(StackContext);
+    const { stack, serviceId, update } = React.useContext<StackContextValue>(StackContext);
 
     React.useEffect(() => {
         data && type === "stack" && setHeader({title: serviceId, breadcrumb: 
@@ -20,7 +20,7 @@ const Service: React.FC<PageProps> = ({setHeader}) => {
 
     return(
         <>
-       {stack && <ServiceEditor update={updateService(serviceId)} name={serviceId} service={stack.services[serviceId]} />}
+       {stack && <ServiceEditor name={serviceId} service={stack.services[serviceId]} />}
         </>
     );
 }

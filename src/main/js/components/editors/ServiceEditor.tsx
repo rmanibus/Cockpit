@@ -1,29 +1,35 @@
 import React from "react";
+
+import { Input, Row, Col, Divider, PageHeader } from "antd";
+import { StackContext, StackContextValue } from '../../contexts/StackContext';
 import { DockerService } from '../../types/DockerStack';
 import { LabelsEditor } from './LabelEditor';
 import { EnvironmentEditor } from './EnvironmentEditor';
-import { Input, Row, Col, Divider, PageHeader } from "antd";
 
-type ServiceProps = {
-  name: string;
-  service: DockerService;
-  update: any;
-};
 
-export const ServiceEditor: React.FC<ServiceProps> = ({ name, service, update }) => {
+export const ServiceEditor: React.FC = () => {
 
-  const updateField = (name) => (value) => {
-    const newService = {...service, [name]: value};
-    update(newService);
+  const { stack, serviceId, update } = React.useContext<StackContextValue>(StackContext);
+
+  const service = stack.services[serviceId];
+
+  const updateService = (service) => {
+    const newServices = { ...stack.services, [serviceId]: service };
+    update("services")(newServices)
+  };
+
+  const updateField = (fieldName: string) => (value) => {
+    const newService = {...stack.services[serviceId], [fieldName]: value};
+    updateService(newService);
   }
-  const updateFieldFromInput = (name) => (e) => {
-      updateField(name)(e.target.value)
+  const updateFieldFromInput = (fieldName) => (e) => {
+      updateField(fieldName)(e.target.value)
   }
 
   return (
     <>
-      <PageHeader title={name} />
-      <Input placeholder="name" value={name} />
+      <PageHeader title={serviceId} />
+      <Input placeholder="name" value={serviceId} />
 
       <Input.Group>
         <Row gutter={8}>

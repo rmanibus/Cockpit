@@ -1,15 +1,13 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Table, Button, Space, PageHeader } from 'antd';
+import { Table, Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Stack } from '../../types/Stack';
 import { StackContext, StackContextValue } from '../../contexts/StackContext';
-import { DataContext, DataContextValue } from '../../contexts/DataContext';
 
 
 export const StackView: React.FC = () => {
   const { stack, stackId } = React.useContext<StackContextValue>(StackContext);
-  const { data, type } = React.useContext<DataContextValue>(DataContext);
 
   const router = useRouter();
   const onCell = (item, rowIndex  ) => {return {onClick: event => router.push('/stacks/' + stackId + '/' + item.name)}};

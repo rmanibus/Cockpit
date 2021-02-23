@@ -9,7 +9,7 @@ export interface StackContextValue {
     stack : DockerStack;
     stackId: string;
     serviceId: string;
-    updateService: any;
+    update: any;
 }
 
 export const StackContext = React.createContext<StackContextValue>(null);
@@ -25,6 +25,8 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
     const router = useRouter();
     const { stackId, serviceId } = router.query;
     const [stack, setStack] = React.useState<DockerStack | null>(null);
+    const [changeSet, setChangeSet] = React.useState({services: {}});
+
     const { setPath } = React.useContext<DataContextValue>(DataContext);
 
     React.useEffect(() => {
@@ -36,9 +38,8 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
         }
     }, [stackId]);
 
-    const updateService = (name) => (service) => {
-        const newServices = { ...stack.services, [name]: service };
-        const newStack = { ...stack, services: newServices };
+    const update = (item) => (value) => {
+        const newStack = { ...stack, [item]: value };
         setStack(newStack);
     };
 
@@ -61,7 +62,7 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
     return (
         <StackContext.Provider
           value={{
-            updateService,
+            update,
             stackId,
             serviceId,
             stack
