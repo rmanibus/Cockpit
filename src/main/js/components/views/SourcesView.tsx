@@ -14,7 +14,6 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ addItem }) => {
   return (
     <>
       <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
-      <PageHeader title="Sources"/>
       <List itemLayout="horizontal" dataSource={listData} renderItem={(item) => <SourceItem item={item} />} />
     </>
   );

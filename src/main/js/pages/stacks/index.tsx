@@ -5,7 +5,7 @@ import { CreateStackForm } from '../../components/forms/StackForm'
 import { DataContext } from '../../contexts/DataContext';
 import { PageProps } from '../../types/Props';
 
-const Stacks: React.FC<PageProps> = ({setBreadCrumbs}) => {
+const Stacks: React.FC<PageProps> = ({setHeader}) => {
     const { setPath, type } = React.useContext(DataContext);
     const [visible, setVisible] = React.useState(false);
 
@@ -18,7 +18,10 @@ const Stacks: React.FC<PageProps> = ({setBreadCrumbs}) => {
     }
 
     React.useEffect(() => {
-        setBreadCrumbs(["home", "stacks"])
+        setHeader({title: "Stacks", breadcrumb: [
+            {path: "/", breadcrumbName: "Home"}, 
+            {path: "/stacks", breadcrumbName: "Stacks"}
+        ]})
         setPath({context:'stacks'});
     }, []);
 

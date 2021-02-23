@@ -31,7 +31,6 @@ export const StackView: React.FC = () => {
   return (
     <>
       <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} />
-      <PageHeader title={data && type === "stack" && data.name}/>
       <Table columns={columns} dataSource={Object.entries(stack.services).map(([key, value]) => {return {name: key}})} />
     </>
   );

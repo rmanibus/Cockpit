@@ -3,8 +3,9 @@ import { Drawer } from 'antd';
 import { SourcesView } from '../../components/views/SourcesView';
 import { CreateSourceForm } from '../../components/forms/SourceForm'
 import { DataContext } from '../../contexts/DataContext';
+import { PageProps } from '../../types/Props';
 
-const Sources: React.FC = () => {
+const Sources: React.FC<PageProps> = ({setHeader}) => {
     const { setPath, type } = React.useContext(DataContext);
     const [visible, setVisible] = React.useState(false);
     const addItem = () => {
@@ -16,6 +17,10 @@ const Sources: React.FC = () => {
     }
 
     React.useEffect(() => {
+        setHeader({title: "Sources", breadcrumb: [
+            {path: "/", breadcrumbName: "Home"}, 
+            {path: "/sources", breadcrumbName: "Sources"}
+        ]})
         setPath({context:'sources'});
     }, []);
 

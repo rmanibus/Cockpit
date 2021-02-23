@@ -1,15 +1,23 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Layout, Menu, Breadcrumb, Button, Space } from 'antd';
+import { Layout, Menu, Breadcrumb, Button, Space, PageHeader } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, UserOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
 import { StackContext, StackContextValue } from '../contexts/StackContext';
 
 const { Header, Footer, Sider, Content } = Layout;
 
 type BaseLayoutProps = {
-  breadCrumbs: Array<string>;
+  header: Header;
 };
-export const BaseLayout: React.FC<BaseLayoutProps> = ({ breadCrumbs, children }) => {
+export type Header = {
+    title: string;
+    breadcrumb: Array<Crumb>;
+}
+type Crumb = {
+  path: string;
+  breadcrumbName: string;
+}
+export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
   const router = useRouter();
   const [collapsed, setCollapsed] = React.useState(false);
   const { stackId } = React.useContext<StackContextValue>(StackContext);
@@ -20,6 +28,9 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ breadCrumbs, children })
 
   const handleMenuClick = (e) => {
     router.push(e.key);
+  };
+  const handleCrumbClick = (target) => () => {
+    router.push(target);
   };
   return (
     <Layout style={{ height: '100vh', width: '100%' }}>
@@ -47,6 +58,12 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ breadCrumbs, children })
             onClick: toggle,
           })}
         </Header>
+        <PageHeader title={header.title} breadcrumbRender={() => <Breadcrumb>
+        {header.breadcrumb.map((crumb) => 
+          <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={handleCrumbClick(crumb.path)}>{crumb.breadcrumbName}</Breadcrumb.Item>
+        )}
+        </Breadcrumb>} />
+
         <Content
           className="site-layout-background"
           style={{
@@ -56,7 +73,6 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ breadCrumbs, children })
             overflow: 'auto',
           }}
         >
-          <Breadcrumb>{breadCrumbs && breadCrumbs.map((value) => <Breadcrumb.Item key={value}>{value}</Breadcrumb.Item>)}</Breadcrumb>
           {children}
         </Content>
         {stackId && (
