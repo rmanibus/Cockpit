@@ -9,7 +9,7 @@ const Stack: React.FC<PageProps> = ({setBreadCrumbs}) => {
   const { stack } = React.useContext<StackContextValue>(StackContext);
   React.useEffect(() => {
     data && type === "stack" && setBreadCrumbs(["home", "stacks", data.name])
-  }, [data])
+  }, [data, type])
   return (
     <>
       {stack && <StackView />}
