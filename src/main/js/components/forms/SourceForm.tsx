@@ -18,7 +18,7 @@ export const EditSourceForm: React.FC<EditSourceFormProps> = ({ id, afterFinish 
         return clearData;
     }, [id])
     const onFinish = (values: any) => {
-        edit(values)
+        edit(values, id)
         .then(afterFinish)
         .then(() => message.success('source edited !'))
         .catch(() => message.error('failed to edit source !'));

@@ -16,8 +16,6 @@ const Stack: React.FC = () => {
     const newStack = { ...stack, services: newServices };
     setStack(newStack);
   };
-
-  console.log(stackId);
   
   React.useEffect(() => {
     if(!stackId){
@@ -27,7 +25,6 @@ const Stack: React.FC = () => {
       try {
         const parsed = yaml.load(res.data);
         setStack(parsed);
-        console.log(parsed);
       } catch (e) {
         console.log(e);
       }

@@ -20,10 +20,12 @@ export const EditStackForm: React.FC<EditStackFormProps> = ({ id, afterFinish })
         return clearData;
     }, [id])
     const onFinish = (values: any) => {
-        edit(values)
+        edit(values, id)
         .then(afterFinish)
         .then(() => message.success('stack edited !'))
-        .catch(() => message.error('failed to edit stack !'));
+        .catch((e) => {
+          console.log(e) ; 
+          message.error('failed to edit stack !')});
     };
 
     return <StackForm data={data} onFinish={onFinish}/>
