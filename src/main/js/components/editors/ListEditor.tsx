@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input, Row, Col } from 'antd';
+import { Button, Input, Row, Col, Tag } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 export type ListProps<T> = {
@@ -28,7 +28,7 @@ export const ListEditor: React.FC<ListProps<any>> = ({ name, list, update }: Lis
   return (
     <>
       <Button style={{float: 'right'}} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
-      <h2>{name}</h2>
+      <h2>{name} {Array.isArray(list) ? <Tag>array</Tag>:<Tag>dict</Tag>}</h2>
       {Array.isArray(list) ? asList(list, update) : asDict(list, update)}
     </>
   );
@@ -36,18 +36,19 @@ export const ListEditor: React.FC<ListProps<any>> = ({ name, list, update }: Lis
 
 const asList = (list, update) => {
   const updateKey = (index) => (key) => {
-    const newList = [...list];
-    newList[index] = key + '=' + newList[index].split('=')[1];
+    const newList = [];
+    newList[index] = key + '=' + list[index].split('=')[1];
     update(newList);
   };
   const updateValue = (index) => (value) => {
-    const newList = [...list];
-    newList[index] = newList[index].split('=')[0] + '=' + value;
+    const newList = [];
+    newList[index] = list[index].split('=')[0] + '=' + value;
     update(newList);
   };
   const remove = (index) => () => {
-    const newList = list.filter((element, itemIndex) => itemIndex != index);
-    update(newList);
+    const newList = [];
+    newList[index] = list[index];
+    update([], newList);
   };
 
   const eventAdapter = (fun) => {
@@ -75,20 +76,14 @@ const asList = (list, update) => {
 };
 const asDict = (list, update) => {
   const updateKey = (oldKey) => (newkey) => {
-    const newList = { ...list };
-    delete newList[oldKey];
-    newList[newkey] = list[oldKey];
-    update(newList);
+    update({[newkey]: list[oldKey]}, {[oldKey]: list[oldKey]});
   };
   const updateValue = (key) => (value) => {
-    const newList = { ...list };
-    newList[key] = value;
-    update(newList);
+    update({[key]: value});
   };
   const remove = (key) => () => {
     const newList = { ...list };
-    delete newList[key];
-    update(newList);
+    update({}, {[key]: null});
   };
   const eventAdapter = (fun) => {
     return (e) => fun(e.target.value);
