@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Button, Tag, message, Drawer } from 'antd';
+import { List, Button, Tag, message, Drawer, PageHeader } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { EditSourceForm } from '../forms/SourceForm';
 import { sourceTypes } from '../../translations/Source';
@@ -14,7 +14,7 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ addItem }) => {
   return (
     <>
       <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
-      <h2>Sources</h2>
+      <PageHeader title="Sources"/>
       <List itemLayout="horizontal" dataSource={listData} renderItem={(item) => <SourceItem item={item} />} />
     </>
   );

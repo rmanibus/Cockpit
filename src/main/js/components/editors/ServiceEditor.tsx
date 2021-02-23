@@ -2,7 +2,7 @@ import React from "react";
 import { DockerService } from '../../types/DockerStack';
 import { LabelsEditor } from './LabelEditor';
 import { EnvironmentEditor } from './EnvironmentEditor';
-import { Input, Row, Col, Divider } from "antd";
+import { Input, Row, Col, Divider, PageHeader } from "antd";
 
 type ServiceProps = {
   name: string;
@@ -22,7 +22,7 @@ export const ServiceEditor: React.FC<ServiceProps> = ({ name, service, update })
 
   return (
     <>
-      <h2>{name}</h2>
+      <PageHeader title={name} />
       <Input placeholder="name" value={name} />
 
       <Input.Group>

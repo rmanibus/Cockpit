@@ -1,9 +1,10 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Button, Space } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, UserOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
+import { StackContext, StackContextValue } from '../contexts/StackContext';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Footer, Sider, Content } = Layout;
 
 type BaseLayoutProps = {
   breadCrumbs: Array<string>;
@@ -11,6 +12,7 @@ type BaseLayoutProps = {
 export const BaseLayout: React.FC<BaseLayoutProps> = ({ breadCrumbs, children }) => {
   const router = useRouter();
   const [collapsed, setCollapsed] = React.useState(false);
+  const { stackId } = React.useContext<StackContextValue>(StackContext);
 
   const toggle = () => {
     setCollapsed(!collapsed);
@@ -19,7 +21,6 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ breadCrumbs, children })
   const handleMenuClick = (e) => {
     router.push(e.key);
   };
-  console.log(breadCrumbs);
   return (
     <Layout style={{ height: '100vh', width: '100%' }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -58,6 +59,14 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ breadCrumbs, children })
           <Breadcrumb>{breadCrumbs && breadCrumbs.map((value) => <Breadcrumb.Item key={value}>{value}</Breadcrumb.Item>)}</Breadcrumb>
           {children}
         </Content>
+        {stackId && (
+          <Footer className="site-layout-background">
+            <Space style={{ float: 'right' }}>
+              <Button type="primary">Save</Button>
+              <Button danger>Discard</Button>
+            </Space>
+          </Footer>
+        )}
       </Layout>
     </Layout>
   );

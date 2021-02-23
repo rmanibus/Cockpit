@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Table, Button, Tag, message, Drawer, Space } from 'antd';
+import { Table, Button, Tag, message, Drawer, Space, PageHeader } from 'antd';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { EditStackForm } from '../forms/StackForm';
 import { sourceTypes } from '../../translations/Source';
@@ -44,7 +44,8 @@ export const StacksView: React.FC<StackViewProps> = ({ addItem }) => {
   return (
     <>
       <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
-      <h2>Stacks</h2>
+      <PageHeader title="Stacks"/>
+
       <Table columns={columns} dataSource={listData} />
     </>
   );

@@ -31,6 +31,8 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
         if(stackId){
             setPath({context:'stacks', id: stackId});
             refresh();
+        } else {
+            clear();
         }
     }, [stackId]);
 
@@ -52,6 +54,9 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
             console.log(e);
           }
         });
+    }
+    const clear = () => {
+        setStack(null);
     }
     return (
         <StackContext.Provider

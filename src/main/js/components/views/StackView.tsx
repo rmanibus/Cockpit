@@ -1,13 +1,15 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Table, Button, Space } from 'antd';
+import { Table, Button, Space, PageHeader } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Stack } from '../../types/Stack';
 import { StackContext, StackContextValue } from '../../contexts/StackContext';
+import { DataContext, DataContextValue } from '../../contexts/DataContext';
 
 
 export const StackView: React.FC = () => {
   const { stack, stackId } = React.useContext<StackContextValue>(StackContext);
+  const { data, type } = React.useContext<DataContextValue>(DataContext);
 
   const router = useRouter();
   const onCell = (item, rowIndex  ) => {return {onClick: event => router.push('/stacks/' + stackId + '/' + item.name)}};
@@ -29,7 +31,7 @@ export const StackView: React.FC = () => {
   return (
     <>
       <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} />
-      <h2>Stack</h2>
+      <PageHeader title={data && type === "stack" && data.name}/>
       <Table columns={columns} dataSource={Object.entries(stack.services).map(([key, value]) => {return {name: key}})} />
     </>
   );
