@@ -1,6 +1,6 @@
 import React from 'react';
-import { List, Button, Tag, message, Drawer, Popconfirm } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Table, Space, Button, Tag, message, Drawer, Popconfirm } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { EditSourceForm } from '../forms/SourceForm';
 import { sourceTypes } from '../../translations/Source';
 import { DataContext } from '../../contexts/DataContext';
@@ -8,9 +8,38 @@ import { Source } from '../../types/Source';
 
 export const SourcesView: React.FC = () => {
   const { listData } = React.useContext(DataContext);
-  return (
-      <List itemLayout="horizontal" dataSource={listData} renderItem={(item) => <SourceItem item={item} />} />
-  );
+
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      render: (type) => (
+        <Tag color={sourceTypes[type].color}>
+          {React.createElement(sourceTypes[type].icon)} {sourceTypes[type].text}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Location',
+      dataIndex: 'location',
+      render: (text) => {
+        text;
+      },
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, item) => <SourceItem item={item} />,
+    },
+  ];
+
+  console.log(listData);
+  return <Table columns={columns} dataSource={listData} />;
 };
 type SourceItemProps = {
   item: Source;
@@ -32,26 +61,16 @@ export const SourceItem: React.FC<SourceItemProps> = ({ item }) => {
     setVisible(true);
   };
   return (
-    <List.Item>
-      <List.Item.Meta
-        onClick={onEdit}
-        title={
-          <>
-            <Tag color={sourceTypes[item.type].color}>
-              {React.createElement(sourceTypes[item.type].icon)} {sourceTypes[item.type].text}
-            </Tag>
-            {item.name}
-          </>
-        }
-        description={'location: ' + item.location}
-      />
-
-      <Popconfirm title="Sure to delete?" onConfirm={onRemove}>
-        <Button shape="circle" danger icon={<DeleteOutlined />} />
-      </Popconfirm>
+    <>
+      <Space size="middle">
+        <Button shape="circle" onClick={onEdit} icon={<EditOutlined />} />
+        <Popconfirm title="Sure to delete?" onConfirm={onRemove}>
+          <Button shape="circle" danger icon={<DeleteOutlined />} />
+        </Popconfirm>
+      </Space>
       <Drawer title={'Edit Source ' + item.name} width={720} onClose={closeDrawer} destroyOnClose visible={visible} bodyStyle={{ paddingBottom: 80 }}>
         <EditSourceForm afterFinish={closeDrawer} id={item.id} />
       </Drawer>
-    </List.Item>
+    </>
   );
 };
