@@ -44,7 +44,6 @@ type ListEditedSpec = {
 
 const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) => {
   const [edited, setEdited] = React.useState<ListEditedSpec>({column: null, key: null});
-
   const updateKey = (index) => (key) => {
     const newList = [];
     newList[index] = key + '=' + list[index].split('=')[1];
@@ -60,17 +59,15 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
     newList[index] = list[index];
     update([], newList);
   };
-
   const eventAdapter = (fun) => {
     return (e) => fun(e.target.value);
   };
-
   const isEdited = (spec: ListEditedSpec) => {
     return edited && edited.key == spec.key && edited.column == spec.column;
-  }
+  };
   const edit = (spec: ListEditedSpec) => () => {
     setEdited(spec);
-  }
+  };
 
   const columns = [
     {
@@ -110,13 +107,12 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
     },
   ];
 
+  console.log(list.map((item, index) => ({ index: index, itemKey: item.split('=')[0], itemValue: item.split('=')[1] })));
   return (
     <Table
       dataSource={
         list &&
-        list.map((item, index) => {
-          return { index: index, itemKey: item.split('=')[0], itemValue: item.split('=')[1] };
-        })
+        list.map((item, index) => ({ index: index, itemKey: item.split('=')[0], itemValue: item.split('=')[1] }))
       }
       columns={columns}
     />

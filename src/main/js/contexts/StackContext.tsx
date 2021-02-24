@@ -4,7 +4,7 @@ import yaml from 'js-yaml';
 import api from '../api';
 import { DockerStack } from '../types/DockerStack';
 import { DataContext, DataContextValue } from './DataContext';
-import { merge, omit, unset } from 'lodash';
+import { merge, omit, isObject, isArray, chain, compact, extend } from 'lodash';
 
 export interface StackContextValue {
     changeSet: any;
@@ -42,10 +42,29 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
 
     const baseupdate = (added, removed = {}) => {
         setChangeSet({...merge(changeSet, {added: added, removed: removed})});
-        setStack(omit({...merge(stack, added)}, getLeaves(removed)));
+        setStack(computeRemoved(merge({...stack}, added), removed));
     };
 
-    var getLeaves = function(tree) : Array<string> {
+    const computeRemoved = (stack, removed) => {
+        if(!removed){
+            return stack;
+        }
+        const newStack = {};
+        for(var n in stack){
+            if(removed[n] && (isObject(removed[n]))){
+                newStack[n] = computeRemoved(stack[n], removed[n])
+            }
+            else if(removed[n] && isArray(removed[n])){
+                newStack[n] = compact(computeRemoved(stack[n], removed[n]))
+            }
+            else if (removed[n] !== stack[n]){
+                newStack[n] = stack[n];
+            }
+        }
+        return newStack;
+    }
+
+    const getLeaves = function(tree) : Array<string> {
         var leaves = [];
         var walk = function(obj,path = ""){
             for(var n in obj){
@@ -60,6 +79,18 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
         }
         walk(tree);
         return leaves;
+    }
+
+    const deepCompact =  (input) => {
+        return isObject(input) ? input
+          : chain(input)
+            .keys()
+            //.filter(key => input[key])
+            .map(key => ({
+              [key]: isObject(input[key]) ? deepCompact(input[key]) : isArray(input[key]) ? deepCompact(compact(input[key])) : input[key]
+            }))
+            .reduce(extend)
+            .value();
     }
 
     const update = (item) => (added, removed) => {
