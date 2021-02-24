@@ -1,8 +1,9 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Layout, Menu, Breadcrumb, Button, Space, PageHeader } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, UserOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
+import { Layout, Menu, Breadcrumb, Button, Space, PageHeader, Drawer } from 'antd';
+import { MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
 import { StackContext, StackContextValue } from '../contexts/StackContext';
+import { ChangesView} from './views/ChangesView';
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -20,12 +21,18 @@ type Crumb = {
 export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
   const router = useRouter();
   const [collapsed, setCollapsed] = React.useState(false);
+  const [changesOpen, setChangeOpen] = React.useState(false);
   const { stackId, changeSet } = React.useContext<StackContextValue>(StackContext);
 
   const toggle = () => {
     setCollapsed(!collapsed);
   };
-
+  const openChanges = () => {
+    setChangeOpen(true);
+  };
+  const closeChanges = () => {
+    setChangeOpen(false);
+  };
   const handleMenuClick = (e) => {
     router.push(e.key);
   };
@@ -63,7 +70,6 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
           <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={handleCrumbClick(crumb.path)}>{crumb.breadcrumbName}</Breadcrumb.Item>
         )}
         </Breadcrumb>} />
-
         <Content
           className="site-layout-background"
           style={{
@@ -76,13 +82,24 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
           {children}
         </Content>
         {stackId && (
+          <>
           <Footer className="site-layout-background">
-            <Button disabled={Object.keys(changeSet).length === 0 ? true: false}>Changes</Button>
+            <Button onClick={openChanges} disabled={Object.keys(changeSet).length === 0 ? true: false}>Changes</Button>
             <Space style={{ float: 'right' }}>
               <Button type="primary">Save</Button>
               <Button danger>Discard</Button>
             </Space>
           </Footer>
+          <Drawer
+          width={720}
+          title="Changes"
+          placement="left"
+          visible={changesOpen}
+          onClose={closeChanges}
+          >
+            <ChangesView/>
+          </Drawer>
+          </>
         )}
       </Layout>
     </Layout>

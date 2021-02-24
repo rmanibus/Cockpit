@@ -184,13 +184,6 @@ const DictTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
       key: 'actions',
       render: (text, item) => (
         <Space>
-          <Button
-            shape="circle"
-            onClick={() => {
-              inputRef.current[item.key].focus({ cursor: 'end' });
-            }}
-            icon={<DeleteOutlined />}
-          />
           <Button shape="circle" danger onClick={remove(item.key)} icon={<DeleteOutlined />} />
         </Space>
       ),

@@ -4,7 +4,7 @@ import yaml from 'js-yaml';
 import api from '../api';
 import { DockerStack } from '../types/DockerStack';
 import { DataContext, DataContextValue } from './DataContext';
-import { merge, omit, isObject, isArray, chain, compact, extend } from 'lodash';
+import { merge, isObject, isArray, compact } from 'lodash';
 
 export interface StackContextValue {
     changeSet: any;
