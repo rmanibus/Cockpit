@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Table, Button, Tag, message, Drawer, Space, PageHeader } from 'antd';
+import { Table, Button, Tag, message, Drawer, Space, Popconfirm } from 'antd';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { EditStackForm } from '../forms/StackForm';
 import { sourceTypes } from '../../translations/Source';
@@ -14,7 +14,9 @@ type StackViewProps = {
 export const StacksView: React.FC<StackViewProps> = ({ addItem }) => {
   const router = useRouter();
   const { listData } = React.useContext(DataContext);
-  const onCell = (item, rowIndex  ) => {return {onClick: event => router.push('stacks/' + item.id)}};
+  const onCell = (item, rowIndex) => {
+    return { onClick: (event) => router.push('stacks/' + item.id) };
+  };
   const columns = [
     {
       onCell: onCell,
@@ -42,12 +44,10 @@ export const StacksView: React.FC<StackViewProps> = ({ addItem }) => {
   ];
 
   return (
-    <>
-      <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
-      <PageHeader title="Stacks"/>
-
+    <Space direction="vertical" style={{ width: '100%' }}>
+      <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
       <Table columns={columns} dataSource={listData} />
-    </>
+    </Space>
   );
 };
 
@@ -73,8 +73,10 @@ export const StackItem: React.FC<StackItemProps> = ({ item }) => {
   return (
     <>
       <Space size="middle">
-        <Button shape="circle" onClick={onEdit} icon={< EditOutlined/>} />
-        <Button shape="circle" danger onClick={onRemove} icon={<DeleteOutlined />} />
+        <Button shape="circle" onClick={onEdit} icon={<EditOutlined />} />
+        <Popconfirm title="Sure to delete?" onConfirm={onRemove}>
+          <Button shape="circle" danger icon={<DeleteOutlined />} />
+        </Popconfirm>
       </Space>
       <Drawer title={'Edit Source ' + item.name} width={720} onClose={closeDrawer} destroyOnClose visible={visible} bodyStyle={{ paddingBottom: 80 }}>
         <EditStackForm afterFinish={closeDrawer} id={item.id} />

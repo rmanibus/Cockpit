@@ -20,7 +20,7 @@ type Crumb = {
 export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
   const router = useRouter();
   const [collapsed, setCollapsed] = React.useState(false);
-  const { stackId } = React.useContext<StackContextValue>(StackContext);
+  const { stackId, changeSet } = React.useContext<StackContextValue>(StackContext);
 
   const toggle = () => {
     setCollapsed(!collapsed);
@@ -35,7 +35,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
   return (
     <Layout style={{ height: '100vh', width: '100%' }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="logo" />
+        <div className="logo" >COCKPIT</div>
         <Menu theme="dark" mode="inline" selectedKeys={[router.pathname]} defaultSelectedKeys={['/']} onClick={handleMenuClick}>
           <Menu.Item key="/" icon={<HomeOutlined />}>
             Home
@@ -77,6 +77,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
         </Content>
         {stackId && (
           <Footer className="site-layout-background">
+            <Button disabled={Object.keys(changeSet).length === 0 ? true: false}>Changes</Button>
             <Space style={{ float: 'right' }}>
               <Button type="primary">Save</Button>
               <Button danger>Discard</Button>

@@ -5,12 +5,13 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Stack } from '../../types/Stack';
 import { StackContext, StackContextValue } from '../../contexts/StackContext';
 
-
 export const StackView: React.FC = () => {
   const { stack, stackId } = React.useContext<StackContextValue>(StackContext);
 
   const router = useRouter();
-  const onCell = (item, rowIndex  ) => {return {onClick: event => router.push('/stacks/' + stackId + '/' + item.name)}};
+  const onCell = (item, rowIndex) => {
+    return { onClick: (event) => router.push('/stacks/' + stackId + '/' + item.name) };
+  };
   const columns = [
     {
       onCell: onCell,
@@ -27,10 +28,16 @@ export const StackView: React.FC = () => {
   ];
 
   return (
-    <>
-      <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} />
-      <Table columns={columns} dataSource={Object.entries(stack.services).map(([key, value]) => {return {name: key}})} />
-    </>
+      <Space direction="vertical" style={{ width: '100%' }}>
+        <Button type="primary" shape="circle" icon={<PlusOutlined />} />
+
+        <Table
+          columns={columns}
+          dataSource={Object.entries(stack.services).map(([key, value]) => {
+            return { name: key };
+          })}
+        />
+      </Space>
   );
 };
 
@@ -40,8 +47,7 @@ type ServiceItemActionsProps = {
 export const ServiceItemActions: React.FC<ServiceItemActionsProps> = ({ item }) => {
   return (
     <>
-      <Space size="middle">
-      </Space>
+      <Space size="middle"></Space>
     </>
   );
 };

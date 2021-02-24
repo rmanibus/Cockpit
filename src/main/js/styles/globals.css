@@ -13,8 +13,11 @@
 }
 
 .logo {
+  text-align: center;
   height: 32px;
   margin: 16px;
+  line-height: 30px;
+  color: white;
   background: rgba(255, 255, 255, 0.3);
 }
 

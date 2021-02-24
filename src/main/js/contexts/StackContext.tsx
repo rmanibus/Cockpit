@@ -7,6 +7,7 @@ import { DataContext, DataContextValue } from './DataContext';
 import { merge, omit, unset } from 'lodash';
 
 export interface StackContextValue {
+    changeSet: any;
     stack : DockerStack;
     stackId: string;
     serviceId: string;
@@ -89,7 +90,8 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
             update,
             stackId,
             serviceId,
-            stack
+            stack,
+            changeSet
           }}
         >
           {children}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Button, Tag, message, Drawer, PageHeader } from 'antd';
+import { List, Button, Tag, message, Drawer, Popconfirm } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { EditSourceForm } from '../forms/SourceForm';
 import { sourceTypes } from '../../translations/Source';
@@ -13,7 +13,7 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ addItem }) => {
   const { listData } = React.useContext(DataContext);
   return (
     <>
-      <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
+      <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
       <List itemLayout="horizontal" dataSource={listData} renderItem={(item) => <SourceItem item={item} />} />
     </>
   );
@@ -26,8 +26,8 @@ export const SourceItem: React.FC<SourceItemProps> = ({ item }) => {
 
   const [visible, setVisible] = React.useState(false);
   const closeDrawer = () => {
-      setVisible(false);
-  }
+    setVisible(false);
+  };
 
   const onRemove = () => {
     remove(item.id)
@@ -51,9 +51,12 @@ export const SourceItem: React.FC<SourceItemProps> = ({ item }) => {
         }
         description={'location: ' + item.location}
       />
-      <Button shape="circle" danger onClick={onRemove} icon={<DeleteOutlined />} />
-      <Drawer title={"Edit Source " + item.name } width={720} onClose={closeDrawer} destroyOnClose visible={visible} bodyStyle={{ paddingBottom: 80 }}>
-          <EditSourceForm afterFinish={closeDrawer} id={item.id} />
+
+      <Popconfirm title="Sure to delete?" onConfirm={onRemove}>
+        <Button shape="circle" danger icon={<DeleteOutlined />} />
+      </Popconfirm>
+      <Drawer title={'Edit Source ' + item.name} width={720} onClose={closeDrawer} destroyOnClose visible={visible} bodyStyle={{ paddingBottom: 80 }}>
+        <EditSourceForm afterFinish={closeDrawer} id={item.id} />
       </Drawer>
     </List.Item>
   );
