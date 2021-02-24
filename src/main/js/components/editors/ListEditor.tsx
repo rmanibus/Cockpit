@@ -74,10 +74,6 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
 
   const columns = [
     {
-      title: 'Index',
-      dataIndex: 'index',
-    },
-    {
       title: 'Key',
       dataIndex: 'itemKey',
       render: (text, item) => (
@@ -87,7 +83,7 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
           value={text}
           onChange={eventAdapter(updateKey(item.index))}
         /> : 
-        <div onClick={edit({column: 'key', key: item.index})}>{text}</div>
+        <div style={{width: '100%', minHeight: '30px'}} onClick={edit({column: 'key', key: item.index})}>{text}</div>
       ),
     },
     {
@@ -100,7 +96,7 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
         value={text} 
         onChange={eventAdapter(updateValue(item.index))} 
       />:
-      <div onClick={edit({column: 'value', key: item.index})}>{text}</div>
+      <div style={{width: '100%', minHeight: '30px'}} onClick={edit({column: 'value', key: item.index})}>{text}</div>
       ,
     },
     {
