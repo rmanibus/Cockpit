@@ -49,10 +49,11 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
         if(!removed){
             return stack;
         }
-        const newStack = {};
+        const newStack = isArray(stack) ? []: {};
+
         for(var n in stack){
             if(removed[n] && (isObject(removed[n]))){
-                newStack[n] = computeRemoved(stack[n], removed[n])
+                newStack[n] = computeRemoved(stack[n], removed[n]);
             }
             else if(removed[n] && isArray(removed[n])){
                 newStack[n] = compact(computeRemoved(stack[n], removed[n]))
@@ -62,35 +63,6 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
             }
         }
         return newStack;
-    }
-
-    const getLeaves = function(tree) : Array<string> {
-        var leaves = [];
-        var walk = function(obj,path = ""){
-            for(var n in obj){
-                if (obj.hasOwnProperty(n)) {
-                    if(obj[n] !== null && (typeof obj[n] === "object" || obj[n] instanceof Array)) {
-                        walk(obj[n],path + "." + n);
-                    } else {
-                        leaves.push((path + "." + n).substring(1));
-                    }
-                }
-            }
-        }
-        walk(tree);
-        return leaves;
-    }
-
-    const deepCompact =  (input) => {
-        return isObject(input) ? input
-          : chain(input)
-            .keys()
-            //.filter(key => input[key])
-            .map(key => ({
-              [key]: isObject(input[key]) ? deepCompact(input[key]) : isArray(input[key]) ? deepCompact(compact(input[key])) : input[key]
-            }))
-            .reduce(extend)
-            .value();
     }
 
     const update = (item) => (added, removed) => {

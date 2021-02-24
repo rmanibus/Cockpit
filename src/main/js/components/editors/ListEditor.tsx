@@ -106,8 +106,7 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
       ),
     },
   ];
-
-  console.log(list.map((item, index) => ({ index: index, itemKey: item.split('=')[0], itemValue: item.split('=')[1] })));
+  
   return (
     <Table
       dataSource={
