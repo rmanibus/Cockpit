@@ -36,14 +36,13 @@ export const ListEditor: React.FC<ListProps<any>> = ({ name, list, update }: Lis
   );
 };
 
-
 type ListEditedSpec = {
   column: string;
   key: number;
-}
+};
 
 const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) => {
-  const [edited, setEdited] = React.useState<ListEditedSpec>({column: null, key: null});
+  const [edited, setEdited] = React.useState<ListEditedSpec>({ column: null, key: null });
   const updateKey = (index) => (key) => {
     const newList = [];
     newList[index] = key + '=' + list[index].split('=')[1];
@@ -68,33 +67,33 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
   const edit = (spec: ListEditedSpec) => () => {
     setEdited(spec);
   };
-
+  const leave = () => {
+    setEdited({ column: null, key: null });
+  };
   const columns = [
     {
       title: 'Key',
       dataIndex: 'itemKey',
-      render: (text, item) => (
-        isEdited({column: 'key', key: item.index}) ? 
-        <Input
-          placeholder="key"
-          value={text}
-          onChange={eventAdapter(updateKey(item.index))}
-        /> : 
-        <div style={{width: '100%', minHeight: '30px'}} onClick={edit({column: 'key', key: item.index})}>{text}</div>
-      ),
+      render: (text, item) =>
+        isEdited({ column: 'key', key: item.index }) ? (
+          <Input onBlur={leave} placeholder="key" value={text} onChange={eventAdapter(updateKey(item.index))} />
+        ) : (
+          <div style={{ width: '100%', minHeight: '30px' }} onClick={edit({ column: 'key', key: item.index })}>
+            {text}
+          </div>
+        ),
     },
     {
       title: 'Value',
       dataIndex: 'itemValue',
       render: (text, item) =>
-      isEdited({column: 'value', key: item.index}) ? 
-      <Input 
-        placeholder="value" 
-        value={text} 
-        onChange={eventAdapter(updateValue(item.index))} 
-      />:
-      <div style={{width: '100%', minHeight: '30px'}} onClick={edit({column: 'value', key: item.index})}>{text}</div>
-      ,
+        isEdited({ column: 'value', key: item.index }) ? (
+          <Input onBlur={leave} placeholder="value" value={text} onChange={eventAdapter(updateValue(item.index))} />
+        ) : (
+          <div style={{ width: '100%', minHeight: '30px' }} onClick={edit({ column: 'value', key: item.index })}>
+            {text}
+          </div>
+        ),
     },
     {
       title: 'Actions',
@@ -106,13 +105,10 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
       ),
     },
   ];
-  
+
   return (
     <Table
-      dataSource={
-        list &&
-        list.map((item, index) => ({ index: index, itemKey: item.split('=')[0], itemValue: item.split('=')[1] }))
-      }
+      dataSource={list && list.map((item, index) => ({ index: index, itemKey: item.split('=')[0], itemValue: item.split('=')[1] }))}
       columns={columns}
     />
   );
@@ -121,12 +117,12 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
 type DictEditedSpec = {
   column: string;
   key: string;
-}
+};
 
 const DictTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) => {
   const inputRef = React.useRef<any>([]);
   const [focusedKey, setFocusedKey] = React.useState(null);
-  const [edited, setEdited] = React.useState<DictEditedSpec>({column: null, key: null});
+  const [edited, setEdited] = React.useState<DictEditedSpec>({ column: null, key: null });
 
   React.useEffect(() => {
     focusedKey && inputRef.current[focusedKey] && inputRef.current[focusedKey].focus({ cursor: 'end' });
@@ -134,7 +130,7 @@ const DictTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
 
   const updateKey = (oldKey) => (newkey) => {
     setFocusedKey(newkey);
-    setEdited({column: 'key', key: newkey});
+    setEdited({ column: 'key', key: newkey });
     update({ [newkey]: list[oldKey] }, { [oldKey]: list[oldKey] });
   };
   const updateValue = (key) => (value) => {
@@ -149,37 +145,39 @@ const DictTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
 
   const isEdited = (spec: DictEditedSpec) => {
     return edited && edited.key == spec.key && edited.column == spec.column;
-  }
+  };
   const edit = (spec: DictEditedSpec) => () => {
     setEdited(spec);
-  }
+  };
+  const leave = () => {
+    setEdited({ column: null, key: null });
+  };
   const columns = [
     {
       title: 'Key',
       dataIndex: 'key',
       key: 'key',
-      render: (key, item) => (
-        isEdited({column: 'key', key: key}) ? 
-        <Input 
-        placeholder="key" 
-        value={key} 
-        onChange={eventAdapter(updateKey(key))} 
-        ref={(ref) => (inputRef.current[key] = ref)} /> : 
-        <div onClick={edit({column: 'key', key: key})}>{key}</div>
-      ),
+      render: (key, item) =>
+        isEdited({ column: 'key', key: key }) ? (
+          <Input onBlur={leave} placeholder="key" value={key} onChange={eventAdapter(updateKey(key))} ref={(ref) => (inputRef.current[key] = ref)} />
+        ) : (
+          <div style={{ width: '100%', minHeight: '30px' }} onClick={edit({ column: 'key', key: key })}>
+            {key}
+          </div>
+        ),
     },
     {
       title: 'Value',
       dataIndex: 'value',
       key: 'value',
-      render: (value, item) => (
-      isEdited({column: 'value', key: item.key}) ? 
-       <Input 
-       placeholder="value" 
-       value={value} 
-       onChange={eventAdapter(updateValue(item.key))} />:
-       <div onClick={edit({column: 'value', key: item.key})}>{value}</div>
-       ),
+      render: (value, item) =>
+        isEdited({ column: 'value', key: item.key }) ? (
+          <Input onBlur={leave} placeholder="value" value={value} onChange={eventAdapter(updateValue(item.key))} />
+        ) : (
+          <div style={{ width: '100%', minHeight: '30px' }} onClick={edit({ column: 'value', key: item.key })}>
+            {value}
+          </div>
+        ),
     },
     {
       title: 'Actions',
