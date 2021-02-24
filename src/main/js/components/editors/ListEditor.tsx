@@ -36,16 +36,16 @@ export const ListEditor: React.FC<ListProps<any>> = ({ name, list, update }: Lis
   );
 };
 
-const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) => {
-  const inputRef = React.useRef<any>([]);
-  const [focusedKey, setFocusedKey] = React.useState(null);
 
-  React.useEffect(() => {
-    focusedKey && inputRef.current[focusedKey] && inputRef.current[focusedKey].focus({ cursor: 'end' });
-  }, [focusedKey]);
+type ListEditedSpec = {
+  column: string;
+  key: number;
+}
+
+const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) => {
+  const [edited, setEdited] = React.useState<ListEditedSpec>({column: null, key: null});
 
   const updateKey = (index) => (key) => {
-    setFocusedKey(key);
     const newList = [];
     newList[index] = key + '=' + list[index].split('=')[1];
     update(newList);
@@ -65,26 +65,43 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
     return (e) => fun(e.target.value);
   };
 
+  const isEdited = (spec: ListEditedSpec) => {
+    return edited && edited.key == spec.key && edited.column == spec.column;
+  }
+  const edit = (spec: ListEditedSpec) => () => {
+    setEdited(spec);
+  }
+
   const columns = [
     {
+      title: 'Index',
+      dataIndex: 'index',
+    },
+    {
       title: 'Key',
-      dataIndex: 'key',
-      key: 'key',
+      dataIndex: 'itemKey',
       render: (text, item) => (
+        isEdited({column: 'key', key: item.index}) ? 
         <Input
-          addonBefore="key"
           placeholder="key"
           value={text}
           onChange={eventAdapter(updateKey(item.index))}
-          ref={(ref) => (inputRef.current[item.key] = ref)}
-        />
+        /> : 
+        <div onClick={edit({column: 'key', key: item.index})}>{text}</div>
       ),
     },
     {
       title: 'Value',
-      dataIndex: 'value',
-      key: 'value',
-      render: (text, item) => <Input addonBefore="value" placeholder="value" value={text} onChange={eventAdapter(updateValue(item.index))} />,
+      dataIndex: 'itemValue',
+      render: (text, item) =>
+      isEdited({column: 'value', key: item.index}) ? 
+      <Input 
+        placeholder="value" 
+        value={text} 
+        onChange={eventAdapter(updateValue(item.index))} 
+      />:
+      <div onClick={edit({column: 'value', key: item.index})}>{text}</div>
+      ,
     },
     {
       title: 'Actions',
@@ -102,7 +119,7 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
       dataSource={
         list &&
         list.map((item, index) => {
-          return { index: index, key: item.split('=')[0], value: item.split('=')[1] };
+          return { index: index, itemKey: item.split('=')[0], itemValue: item.split('=')[1] };
         })
       }
       columns={columns}
@@ -110,9 +127,15 @@ const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
   );
 };
 
+type DictEditedSpec = {
+  column: string;
+  key: string;
+}
+
 const DictTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) => {
   const inputRef = React.useRef<any>([]);
   const [focusedKey, setFocusedKey] = React.useState(null);
+  const [edited, setEdited] = React.useState<DictEditedSpec>({column: null, key: null});
 
   React.useEffect(() => {
     focusedKey && inputRef.current[focusedKey] && inputRef.current[focusedKey].focus({ cursor: 'end' });
@@ -120,6 +143,7 @@ const DictTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
 
   const updateKey = (oldKey) => (newkey) => {
     setFocusedKey(newkey);
+    setEdited({column: 'key', key: newkey});
     update({ [newkey]: list[oldKey] }, { [oldKey]: list[oldKey] });
   };
   const updateValue = (key) => (value) => {
@@ -132,20 +156,39 @@ const DictTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
     return (e) => fun(e.target.value);
   };
 
+  const isEdited = (spec: DictEditedSpec) => {
+    return edited && edited.key == spec.key && edited.column == spec.column;
+  }
+  const edit = (spec: DictEditedSpec) => () => {
+    setEdited(spec);
+  }
   const columns = [
     {
       title: 'Key',
       dataIndex: 'key',
       key: 'key',
-      render: (key, record) => (
-        <Input placeholder="key" value={key} onChange={eventAdapter(updateKey(key))} ref={(ref) => (inputRef.current[key] = ref)} />
+      render: (key, item) => (
+        isEdited({column: 'key', key: key}) ? 
+        <Input 
+        placeholder="key" 
+        value={key} 
+        onChange={eventAdapter(updateKey(key))} 
+        ref={(ref) => (inputRef.current[key] = ref)} /> : 
+        <div onClick={edit({column: 'key', key: key})}>{key}</div>
       ),
     },
     {
       title: 'Value',
       dataIndex: 'value',
       key: 'value',
-      render: (value, item) => <Input placeholder="value" value={value} onChange={eventAdapter(updateValue(item.key))} />,
+      render: (value, item) => (
+      isEdited({column: 'value', key: item.key}) ? 
+       <Input 
+       placeholder="value" 
+       value={value} 
+       onChange={eventAdapter(updateValue(item.key))} />:
+       <div onClick={edit({column: 'value', key: item.key})}>{value}</div>
+       ),
     },
     {
       title: 'Actions',
@@ -164,7 +207,6 @@ const DictTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) =
       ),
     },
   ];
-
   return (
     <Table
       dataSource={
