@@ -7,11 +7,8 @@ import { sourceTypes } from '../../translations/Source';
 import { DataContext } from '../../contexts/DataContext';
 import { Stack } from '../../types/Stack';
 
-type StackViewProps = {
-  addItem: any;
-};
 
-export const StacksView: React.FC<StackViewProps> = ({ addItem }) => {
+export const StacksView: React.FC = () => {
   const router = useRouter();
   const { listData } = React.useContext(DataContext);
   const onCell = (item, rowIndex) => {
@@ -44,10 +41,7 @@ export const StacksView: React.FC<StackViewProps> = ({ addItem }) => {
   ];
 
   return (
-    <Space direction="vertical" style={{ width: '100%' }}>
-      <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
       <Table columns={columns} dataSource={listData} />
-    </Space>
   );
 };
 

@@ -1,21 +1,15 @@
 import React from 'react';
 import { List, Button, Tag, message, Drawer, Popconfirm } from 'antd';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import { EditSourceForm } from '../forms/SourceForm';
 import { sourceTypes } from '../../translations/Source';
 import { DataContext } from '../../contexts/DataContext';
 import { Source } from '../../types/Source';
 
-type SourcesViewProps = {
-  addItem: any;
-};
-export const SourcesView: React.FC<SourcesViewProps> = ({ addItem }) => {
+export const SourcesView: React.FC = () => {
   const { listData } = React.useContext(DataContext);
   return (
-    <>
-      <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
       <List itemLayout="horizontal" dataSource={listData} renderItem={(item) => <SourceItem item={item} />} />
-    </>
   );
 };
 type SourceItemProps = {

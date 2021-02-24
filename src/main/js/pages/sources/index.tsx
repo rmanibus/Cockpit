@@ -1,5 +1,6 @@
 import React from 'react';
-import { Drawer } from 'antd';
+import { Drawer, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { SourcesView } from '../../components/views/SourcesView';
 import { CreateSourceForm } from '../../components/forms/SourceForm'
 import { DataContext } from '../../contexts/DataContext';
@@ -17,16 +18,19 @@ const Sources: React.FC<PageProps> = ({setHeader}) => {
     }
 
     React.useEffect(() => {
-        setHeader({title: "Sources", breadcrumb: [
-            {path: "/", breadcrumbName: "Home"}, 
-            {path: "/sources", breadcrumbName: "Sources"}
+        setHeader({
+            title: "Sources", 
+            extra: <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />,
+            breadcrumb: [
+                {path: "/", breadcrumbName: "Home"}, 
+                {path: "/sources", breadcrumbName: "Sources"}
         ]})
         setPath({context:'sources'});
     }, []);
 
     return(
         <>
-        {type === "Array<source>" && <SourcesView addItem={addItem}/>}
+        {type === "Array<source>" && <SourcesView/>}
         <Drawer
         title="Create a new Source"
         width={720}

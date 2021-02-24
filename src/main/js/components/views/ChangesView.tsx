@@ -1,41 +1,53 @@
 
 import React from 'react';
-import { isObject } from 'lodash';
+import {diff} from 'deep-diff';
 import { Alert } from 'antd';
 import { StackContext, StackContextValue } from '../../contexts/StackContext';
 
 
 export const ChangesView: React.FC = () => {
 
-    const { changeSet } = React.useContext<StackContextValue>(StackContext);
-    const display = (changeset) => {
-        
-        const changes = {};
-        const walk = (obj, path="", type) => {
-            for(var n in obj ){
-                const newPath = path ?  path + "."+ n : n ;
-                if(obj[n] && (isObject(obj[n]))){
-                    walk(obj[n], newPath, type);
-                }else{
-                    changes[newPath] = {...changes[newPath], [type]: obj[n]};
-                }
-            }
-        }
-        walk(changeset.added, "", "added");
-        walk(changeset.removed, "", "removed");
-        console.log(changeset.added, changes);
-        return changes;
-    }
+    const { originalStack, stack } = React.useContext<StackContextValue>(StackContext);
+    const [diffs, setDiffs] = React.useState([]);
 
+    React.useEffect(() => {
+        setDiffs(diff(originalStack, stack));
+    }, [originalStack, stack]);
+
+    const displayDiff = (diffItem) => {
+        switch(diffItem.kind){
+            case 'N': 
+            return (
+                <>
+                    {diffItem.path.join('.')}
+                    <Alert type="success" message={diffItem.rhs }/>
+                </>)
+            case 'D': 
+            return (
+                <>
+                    {diffItem.path.join('.')}
+                    <Alert type="error" message={diffItem.lhs }/>
+                </>)
+            case 'E': 
+            return (
+            <>
+                {diffItem.path.join('.')}
+                <Alert type="success" message={diffItem.lhs }/>
+                <Alert type="error" message={diffItem.rhs }/>
+            </>)
+            case 'A': 
+            return (
+                <>
+                    {diffItem.path.join('.') + '[' + diffItem.index + ']'}
+                    {displayDiff(diffItem.item)}
+                </>)
+        }
+        return <></>;
+    }
+    console.log(diffs);
     return(
         <>
-        {Object.entries(display(changeSet)).map(([key, value]) => 
-            <>
-                {key}
-                {value.added && <Alert message={value.added} type="success" />}
-                {value.removed && <Alert message={value.removed} type="error" />}
-            </>
-        )}
+        {diffs && diffs.map(displayDiff)}
         </>
     );
 }

@@ -12,6 +12,7 @@ type BaseLayoutProps = {
 };
 export type Header = {
     title: string;
+    extra: React.ReactNode;
     breadcrumb: Array<Crumb>;
 }
 type Crumb = {
@@ -22,7 +23,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
   const router = useRouter();
   const [collapsed, setCollapsed] = React.useState(false);
   const [changesOpen, setChangeOpen] = React.useState(false);
-  const { stackId, changeSet } = React.useContext<StackContextValue>(StackContext);
+  const { stackId } = React.useContext<StackContextValue>(StackContext);
 
   const toggle = () => {
     setCollapsed(!collapsed);
@@ -65,7 +66,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
             onClick: toggle,
           })}
         </Header>
-        <PageHeader title={header.title} breadcrumbRender={() => <Breadcrumb>
+        <PageHeader extra={header.extra} title={header.title} breadcrumbRender={() => <Breadcrumb>
         {header.breadcrumb.map((crumb) => 
           <Breadcrumb.Item style={{cursor: 'pointer'}} onClick={handleCrumbClick(crumb.path)}>{crumb.breadcrumbName}</Breadcrumb.Item>
         )}
@@ -84,7 +85,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
         {stackId && (
           <>
           <Footer className="site-layout-background">
-            <Button onClick={openChanges} disabled={Object.keys(changeSet).length === 0 ? true: false}>Changes</Button>
+            <Button onClick={openChanges}>Changes</Button>
             <Space style={{ float: 'right' }}>
               <Button type="primary">Save</Button>
               <Button danger>Discard</Button>

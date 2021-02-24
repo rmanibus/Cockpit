@@ -5,9 +5,10 @@ import api from '../api';
 import { DockerStack } from '../types/DockerStack';
 import { DataContext, DataContextValue } from './DataContext';
 import { merge, isObject, isArray, compact } from 'lodash';
+import { BoldOutlined, FileAddFilled } from '@ant-design/icons';
 
 export interface StackContextValue {
-    changeSet: any;
+    originalStack: DockerStack;
     stack : DockerStack;
     stackId: string;
     serviceId: string;
@@ -26,8 +27,9 @@ export type Resource = {
 export const StackContextProvider: React.FC<StackContextProviderProps> = ({ children }: StackContextProviderProps) => {
     const router = useRouter();
     const { stackId, serviceId } = router.query;
+    const [originalStack, setOriginalStack] = React.useState<DockerStack | null>(null);
     const [stack, setStack] = React.useState<DockerStack | null>(null);
-    const [changeSet, setChangeSet] = React.useState({});
+    
 
     const { setPath } = React.useContext<DataContextValue>(DataContext);
 
@@ -41,14 +43,22 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
     }, [stackId]);
 
     const baseupdate = (added, removed = {}) => {
-        setChangeSet({...merge(changeSet, {added: added, removed: removed})});
-        setStack(computeRemoved(merge({...stack}, added), removed));
+        var newStack = {...stack};
+        if(added){
+            newStack = computeAdded(newStack, added);
+        }
+        if(removed){
+            newStack = computeRemoved(newStack, removed);
+        }
+        setStack(newStack);
     };
 
+    const computeAdded = (stack, added) => {
+        return merge(stack, added)
+    };
     const computeRemoved = (stack, removed) => {
-        if(!removed){
-            return stack;
-        }
+        if(!removed) return stack;
+        
         const newStack = isArray(stack) ? []: {};
 
         for(var n in stack){
@@ -63,7 +73,7 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
             }
         }
         return newStack;
-    }
+    };
 
     const update = (item) => (added, removed) => {
         baseupdate({[item]: added}, removed && {[item]: removed})
@@ -73,18 +83,18 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
         if(!stackId){
             return Promise.reject("path not set");
         }
-        setChangeSet({});
         return api.get('stacks/' + stackId + '/compose').then((res) => {
           try {
             const parsed = yaml.load(res.data);
             setStack(parsed);
+            setOriginalStack(parsed);
           } catch (e) {
             console.log(e);
           }
         });
     }
     const clear = () => {
-        setChangeSet({});
+        setOriginalStack(null);
         setStack(null);
     }
     return (
@@ -94,7 +104,7 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
             stackId,
             serviceId,
             stack,
-            changeSet
+            originalStack
           }}
         >
           {children}

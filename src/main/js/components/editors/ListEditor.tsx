@@ -22,7 +22,7 @@ export const ListEditor: React.FC<ListProps<any>> = ({ name, list, update }: Lis
       .map((val) => parseInt(val.replace('new', '')));
 
     const index = Math.max(0, ...indexes) + 1;
-    const newList = { ...list, ['new' + index]: 'value' };
+    const newList = {['new' + index]: 'value' };
     update(newList);
   };
   return (

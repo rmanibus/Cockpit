@@ -21,6 +21,13 @@ export const StackView: React.FC = () => {
       render: (name) => <a>{name}</a>,
     },
     {
+      onCell: onCell,
+      title: 'Ports',
+      dataIndex: 'ports',
+      key: 'ports',
+      render: (ports) => (ports && ports.join(', ')),
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (text, item) => <ServiceItemActions item={item} />,
@@ -28,16 +35,16 @@ export const StackView: React.FC = () => {
   ];
 
   return (
-      <Space direction="vertical" style={{ width: '100%' }}>
-        <Button type="primary" shape="circle" icon={<PlusOutlined />} />
-
+    <>
+        <Button style={{float: 'right'}} type="primary" shape="circle" icon={<PlusOutlined />} />
+        <h2>Services</h2>
         <Table
           columns={columns}
           dataSource={Object.entries(stack.services).map(([key, value]) => {
-            return { name: key };
+            return { name: key, ports: value.ports };
           })}
         />
-      </Space>
+        </>
   );
 };
 
