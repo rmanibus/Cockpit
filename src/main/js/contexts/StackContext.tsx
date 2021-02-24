@@ -10,8 +10,9 @@ import { BoldOutlined, FileAddFilled } from '@ant-design/icons';
 export interface StackContextValue {
     originalStack: DockerStack;
     stack : DockerStack;
-    stackId: string;
-    serviceId: string;
+    stackId?: string;
+    serviceId?: string;
+    networkId?: string;
     update: any;
 }
 
@@ -26,7 +27,7 @@ export type Resource = {
 }
 export const StackContextProvider: React.FC<StackContextProviderProps> = ({ children }: StackContextProviderProps) => {
     const router = useRouter();
-    const { stackId, serviceId } = router.query;
+    const { stackId, serviceId, networkId } = router.query;
     const [originalStack, setOriginalStack] = React.useState<DockerStack | null>(null);
     const [stack, setStack] = React.useState<DockerStack | null>(null);
     
@@ -103,6 +104,7 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
             update,
             stackId,
             serviceId,
+            networkId,
             stack,
             originalStack
           }}

@@ -10,7 +10,7 @@ export const ServicesListView: React.FC = () => {
   const router = useRouter();
 
   const onCell = (item, rowIndex) => {
-    return { onClick: (event) => router.push('/stacks/' + stackId + '/' + item.name) };
+    return { onClick: (event) => router.push('/stacks/' + stackId + '/services/' + item.name) };
   };
   const servicesColumns = [
     {
