@@ -1,60 +1,14 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import { Table, Button, Space } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import { Stack } from '../../types/Stack';
-import { StackContext, StackContextValue } from '../../contexts/StackContext';
-
+import { VolumesListView } from './VolumesListView';
+import { ServicesListView } from './ServicesListView';
+import { NetworksListView } from './NetworksListView';
 export const StackView: React.FC = () => {
-  const { stack, stackId } = React.useContext<StackContextValue>(StackContext);
-
-  const router = useRouter();
-  const onCell = (item, rowIndex) => {
-    return { onClick: (event) => router.push('/stacks/' + stackId + '/' + item.name) };
-  };
-  const columns = [
-    {
-      onCell: onCell,
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (name) => <a>{name}</a>,
-    },
-    {
-      onCell: onCell,
-      title: 'Ports',
-      dataIndex: 'ports',
-      key: 'ports',
-      render: (ports) => (ports && ports.join(', ')),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text, item) => <ServiceItemActions item={item} />,
-    },
-  ];
 
   return (
     <>
-        <Button style={{float: 'right'}} type="primary" shape="circle" icon={<PlusOutlined />} />
-        <h2>Services</h2>
-        <Table
-          columns={columns}
-          dataSource={Object.entries(stack.services).map(([key, value]) => {
-            return { name: key, ports: value.ports };
-          })}
-        />
-        </>
-  );
-};
-
-type ServiceItemActionsProps = {
-  item: Stack;
-};
-export const ServiceItemActions: React.FC<ServiceItemActionsProps> = ({ item }) => {
-  return (
-    <>
-      <Space size="middle"></Space>
+      <ServicesListView />
+      <VolumesListView />
+      <NetworksListView />
     </>
   );
 };
