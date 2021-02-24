@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input, Row, Col, Tag } from 'antd';
+import { Button, Input, Row, Col, Tag, Table, Space } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 export type ListProps<T> = {
@@ -27,15 +27,25 @@ export const ListEditor: React.FC<ListProps<any>> = ({ name, list, update }: Lis
   };
   return (
     <>
-      <Button style={{float: 'right'}} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
-      <h2>{name} {Array.isArray(list) ? <Tag>array</Tag>:<Tag>dict</Tag>}</h2>
-      {Array.isArray(list) ? asList(list, update) : asDict(list, update)}
+      <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
+      <h2>
+        {name} {Array.isArray(list) ? <Tag>array</Tag> : <Tag>dict</Tag>}
+      </h2>
+      {Array.isArray(list) ? <ListTable list={list} update={update} /> : <DictTable list={list} update={update} />}
     </>
   );
 };
 
-const asList = (list, update) => {
+const ListTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) => {
+  const inputRef = React.useRef<any>([]);
+  const [focusedKey, setFocusedKey] = React.useState(null);
+
+  React.useEffect(() => {
+    focusedKey && inputRef.current[focusedKey] && inputRef.current[focusedKey].focus({ cursor: 'end' });
+  }, [focusedKey]);
+
   const updateKey = (index) => (key) => {
+    setFocusedKey(key);
     const newList = [];
     newList[index] = key + '=' + list[index].split('=')[1];
     update(newList);
@@ -55,61 +65,117 @@ const asList = (list, update) => {
     return (e) => fun(e.target.value);
   };
 
-  return list.map((item, index) => (
-    <Input.Group>
-      <Row gutter={8}>
-        <Col span={16}>
-          <Input addonBefore="key" placeholder="key" value={item.split('=')[0]} onChange={eventAdapter(updateKey(index))} />
-        </Col>
-        <Col span={8}>
-          <Input
-            addonBefore="value"
-            placeholder="value"
-            value={item.split('=')[1] || ''}
-            onChange={eventAdapter(updateValue(index))}
-            addonAfter={<Button shape="circle" danger onClick={remove(index)} icon={<DeleteOutlined />} />}
-          />
-        </Col>
-      </Row>
-    </Input.Group>
-  ));
+  const columns = [
+    {
+      title: 'Key',
+      dataIndex: 'key',
+      key: 'key',
+      render: (text, item) => (
+        <Input
+          addonBefore="key"
+          placeholder="key"
+          value={text}
+          onChange={eventAdapter(updateKey(item.index))}
+          ref={(ref) => (inputRef.current[item.key] = ref)}
+        />
+      ),
+    },
+    {
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+      render: (text, item) => <Input addonBefore="value" placeholder="value" value={text} onChange={eventAdapter(updateValue(item.index))} />,
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (text, item) => (
+        <Space>
+          <Button shape="circle" danger onClick={remove(item.index)} icon={<DeleteOutlined />} />
+        </Space>
+      ),
+    },
+  ];
+
+  return (
+    <Table
+      dataSource={
+        list &&
+        list.map((item, index) => {
+          return { index: index, key: item.split('=')[0], value: item.split('=')[1] };
+        })
+      }
+      columns={columns}
+    />
+  );
 };
-const asDict = (list, update) => {
+
+const DictTable: React.FC<ListProps<any>> = ({ list, update }: ListProps<any>) => {
+  const inputRef = React.useRef<any>([]);
+  const [focusedKey, setFocusedKey] = React.useState(null);
+
+  React.useEffect(() => {
+    focusedKey && inputRef.current[focusedKey] && inputRef.current[focusedKey].focus({ cursor: 'end' });
+  }, [focusedKey]);
+
   const updateKey = (oldKey) => (newkey) => {
-    update({[newkey]: list[oldKey]}, {[oldKey]: list[oldKey]});
+    setFocusedKey(newkey);
+    update({ [newkey]: list[oldKey] }, { [oldKey]: list[oldKey] });
   };
   const updateValue = (key) => (value) => {
-    update({[key]: value});
+    update({ [key]: value });
   };
   const remove = (key) => () => {
-    const newList = { ...list };
-    update({}, {[key]: null});
+    update({}, { [key]: list[key] });
   };
   const eventAdapter = (fun) => {
     return (e) => fun(e.target.value);
   };
+
+  const columns = [
+    {
+      title: 'Key',
+      dataIndex: 'key',
+      key: 'key',
+      render: (key, record) => (
+        <Input placeholder="key" value={key} onChange={eventAdapter(updateKey(key))} ref={(ref) => (inputRef.current[key] = ref)} />
+      ),
+    },
+    {
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+      render: (value, item) => <Input placeholder="value" value={value} onChange={eventAdapter(updateValue(item.key))} />,
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (text, item) => (
+        <Space>
+          <Button
+            shape="circle"
+            onClick={() => {
+              inputRef.current[item.key].focus({ cursor: 'end' });
+            }}
+            icon={<DeleteOutlined />}
+          />
+          <Button shape="circle" danger onClick={remove(item.key)} icon={<DeleteOutlined />} />
+        </Space>
+      ),
+    },
+  ];
+
   return (
-    list &&
-    Object.entries(list)
-      .sort(([key1], [key2]) => key1.localeCompare(key2))
-      .map(([key, itemValue]) => {
-        return (
-          <Input.Group>
-            <Row gutter={8}>
-              <Col span={16}>
-                <Input placeholder="key" value={key} onChange={eventAdapter(updateKey(key))} />
-              </Col>
-              <Col span={8}>
-                <Input
-                  placeholder="value"
-                  value={itemValue}
-                  onChange={eventAdapter(updateValue(key))}
-                  addonAfter={<Button shape="circle" danger onClick={remove(key)} icon={<DeleteOutlined />} />}
-                />
-              </Col>
-            </Row>
-          </Input.Group>
-        );
-      })
+    <Table
+      dataSource={
+        list &&
+        Object.entries(list)
+          .sort(([key1], [key2]) => key1.localeCompare(key2))
+          .map(([key, itemValue]) => {
+            return { key: key, value: itemValue };
+          })
+      }
+      columns={columns}
+    />
   );
 };
