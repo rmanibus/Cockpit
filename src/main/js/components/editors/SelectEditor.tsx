@@ -25,7 +25,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({ choices, name, list,
 
   if (!active) {
     return (
-      <div {...otherProps} style={{ width: '100%', minHeight: '30px' }} onClick={activate}>
+      <div {...otherProps} style={{ lineHeight: '2em', paddingLeft: '12px', width: '100%', minHeight: '30px' }} onClick={activate}>
         {list && list.map((element) => <Tag>{element}</Tag>)}
       </div>
     );
