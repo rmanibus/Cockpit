@@ -93,6 +93,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
           </Footer>
           <Drawer
           width={720}
+          destroyOnClose
           title="Changes"
           placement="left"
           visible={changesOpen}

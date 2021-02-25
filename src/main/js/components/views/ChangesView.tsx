@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {diff} from 'deep-diff';
+import diff  from 'deep-diff';
 import { Alert } from 'antd';
 import { StackContext, StackContextValue } from '../../contexts/StackContext';
 
@@ -44,7 +44,6 @@ export const ChangesView: React.FC = () => {
         }
         return <></>;
     }
-    console.log(diffs);
     return(
         <>
         {diffs && diffs.map(displayDiff)}
