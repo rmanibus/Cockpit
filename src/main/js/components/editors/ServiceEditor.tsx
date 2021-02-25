@@ -7,7 +7,7 @@ import { EnvironmentEditor } from './EnvironmentEditor';
 import { DockerService } from '../../types/DockerStack';
 import { SimpleEditor } from './SimpleEditor';
 import { ListEditor } from './ListEditor';
-import { SelectEditor } from './SelectEditor';
+import { MultiSelectEditor } from './MultiSelectEditor';
 import { SimpleEditorContainer } from './SimpleEditorContainer';
 
 export const ServiceEditor: React.FC = () => {
@@ -46,7 +46,7 @@ export const ServiceEditor: React.FC = () => {
             <ListEditor name="entrypoint" value={service.entrypoint} update={updateField('entrypoint')} />
             <ListEditor name="dns" value={service.dns} update={updateField('dns')} />
             <ListEditor name="dns search" value={service.dns_search} update={updateField('dns_search')} />
-            <SelectEditor name="Depends on" list={service.depends_on} onChange={updateField('depends_on')} choices={Object.keys(stack.services)} />
+            <MultiSelectEditor name="Depends on" list={service.depends_on} onChange={updateField('depends_on')} choices={Object.keys(stack.services)} />
           </SimpleEditorContainer>
           <Divider />
           <h2>Build</h2>

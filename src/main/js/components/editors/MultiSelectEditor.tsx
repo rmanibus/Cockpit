@@ -3,15 +3,15 @@ import { Select, Tag } from 'antd';
 
 const { Option } = Select;
 
-export type SelectEditorProps = {
-  value?: string;
+export type MultiSelectEditorProps = {
+  list?: string[];
   choices: string[];
   name: string;
-  onChange: (newValue: string) => void;
+  onChange: (newValue: string[]) => void;
   [other :string]: any;
 };
 
-export const SelectEditor: React.FC<SelectEditorProps> = ({ choices, name, value, onChange, ...otherProps }) => {
+export const MultiSelectEditor: React.FC<MultiSelectEditorProps> = ({ choices, name, list, onChange, ...otherProps }) => {
   const [active, setActive] = React.useState(false);
   const activate = () => {
     setActive(true);
@@ -23,14 +23,15 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({ choices, name, value
   if (!active) {
     return (
       <div {...otherProps} style={{ lineHeight: '2em', paddingLeft: '12px', width: '100%', minHeight: '30px' }} onClick={activate}>
-        {value &&  <Tag>{value}</Tag>}
+        {list && list.map((element) => <Tag>{element}</Tag>)}
       </div>
     );
   }
   return <Select
   onBlur={deActivate}
   placeholder={name}
-  value={value}
+  value={list}
+  mode="multiple"
   allowClear
   style={{ width: '100%' }}
   onChange={(value) => onChange(value)}
