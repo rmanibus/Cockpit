@@ -1,12 +1,12 @@
 import React from 'react';
-import { ListProps, ListEditor } from './ListEditor'
-import { Label } from '../../types/DockerStack';
+import { ListProps, ListOrDictEditor } from './ListOrDictEditor'
+import { Labels } from '../../types/DockerStack';
 
 
-export const LabelsEditor: React.FC<ListProps<Label>> = ({ list, update }) => {
+export const LabelsEditor: React.FC<ListProps<Labels>> = ({ list, update }) => {
     return (
       <>
-        <ListEditor name="labels" list={list} update={update} />
+        <ListOrDictEditor name="labels" list={list} update={update} />
       </>
     );
   };
