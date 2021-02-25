@@ -69,6 +69,8 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
             else if(removed[n] && isArray(removed[n])){
                 newStack[n] = compact(computeRemoved(stack[n], removed[n]))
             }
+            else if (removed[n] === null){
+            }
             else if (removed[n] !== stack[n]){
                 newStack[n] = stack[n];
             }

@@ -20,7 +20,7 @@ const Service: React.FC<PageProps> = ({ setHeader }) => {
           { path: '/stacks/' + data.id + '/services/' + serviceId, breadcrumbName: serviceId },
         ],
       });
-  }, [data, type]);
+  }, [data, type, serviceId]);
 
   return <>{stack && <ServiceEditor />}</>;
 };

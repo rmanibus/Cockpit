@@ -20,7 +20,7 @@ const Network: React.FC<PageProps> = ({ setHeader }) => {
           { path: '/stacks/' + data.id + '/networks/' + networkId, breadcrumbName: networkId },
         ],
       });
-  }, [data, type]);
+  }, [data, type, networkId]);
 
   return <>{stack && <NetworkEditor  />}</>;
 };
