@@ -14,7 +14,16 @@ Features:
 * Navigate in git history and restore passed versions of a stack [TO DO]
 * Connect to Docker engine (in read only) and Display stack status & logs [TO DO]
 
-![cockpit](./doc/cockpit.png)
+# Stack Editor
+
+![cockpit](./doc/cockpit-editor.png)
+
+# Stack List
+
+![cockpit](./doc/cockpit-stacks.png)
+
+# Git Sources List
+![cockpit](./doc/cockpit-sources.png)
 # Start Project
 
 create the database
