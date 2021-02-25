@@ -30,7 +30,8 @@ export const NetworkEditor: React.FC = () => {
   }, [stack]);
 
   return (
-    network && <> {
+    <> {
+      network && 
       <SimpleEditorContainer>
         <SimpleEditor name="Name" value={networkId} onChange={renameNetwork} />
         <SimpleEditor name="Driver" value={network.driver} onChange={updateField('driver')} />
