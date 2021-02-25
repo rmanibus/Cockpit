@@ -7,7 +7,7 @@ import { EnvironmentEditor } from './EnvironmentEditor';
 import { DockerService } from '../../types/DockerStack';
 import { SimpleEditor } from './SimpleEditor';
 import { ListEditor } from './ListEditor';
-
+import { SelectEditor } from './SelectEditor';
 const { Option } = Select;
 
 export const ServiceEditor: React.FC = () => {
@@ -63,17 +63,7 @@ export const ServiceEditor: React.FC = () => {
               <SimpleEditor name="dns search" value={service.dns_search} onChange={updateField('dns_search')} />
             </Descriptions.Item>
             <Descriptions.Item span={3} label="Depends On">
-              <Select
-                placeholder="Depends on"
-                mode="multiple"
-                allowClear
-                style={{ width: '100%' }}
-                onChange={(value) => updateField('depends_on')(value)}
-              >
-                {Object.keys(stack.services).map((service) => (
-                  <Option value={service}>{service}</Option>
-                ))}
-              </Select>
+            <SelectEditor name="Depends on" list={service.depends_on} onChange={updateField('depends_on')} choices={Object.keys(stack.services)} />
             </Descriptions.Item>
           </Descriptions>
 
