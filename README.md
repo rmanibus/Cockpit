@@ -16,14 +16,14 @@ Features:
 
 # Stack Editor
 
-![cockpit](./doc/cockpit-editor.png)
+![cockpit](./docs/cockpit-editor.png)
 
 # Stack List
 
-![cockpit](./doc/cockpit-stacks.png)
+![cockpit](./docs/cockpit-stacks.png)
 
 # Git Sources List
-![cockpit](./doc/cockpit-sources.png)
+![cockpit](./docs/cockpit-sources.png)
 # Start Project
 
 create the database
