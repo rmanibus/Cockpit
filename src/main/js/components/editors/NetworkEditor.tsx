@@ -1,21 +1,28 @@
 import React from "react";
 
-import { Switch, Input, Row, Col } from "antd";
+import { Switch } from "antd";
 import { StackContext, StackContextValue } from '../../contexts/StackContext';
 import { DockerNetworkDef} from '../../types/DockerStack';
+import { SimpleEditorContainer } from './SimpleEditorContainer';
+import { SimpleEditor } from './SimpleEditor';
+import { SwitchEditor } from './SwitchEditor';
+import { useRouter } from 'next/router';
 
 export const NetworkEditor: React.FC = () => {
   const [network, setNetwork] = React.useState<DockerNetworkDef>(null);
-  const { stack, networkId, update } = React.useContext<StackContextValue>(StackContext);
+  const { stack, stackId, networkId, update } = React.useContext<StackContextValue>(StackContext);
+  const router = useRouter();
 
-  const updateService = (added, removed = null) => {
+  const renameNetwork = (newNetworkId) => {
+    router.push('/stacks/' + stackId + '/networks/' + newNetworkId);
+    update('networks')({ [newNetworkId]: network }, { [networkId]: null });
+  };
+
+  const updateNetwork = (added, removed = null) => {
     update("networks")({ [networkId]: added }, removed && { [networkId]: removed })
   };
   const updateField = (fieldName: string) => (added, removed = null) => {
-    updateService({[fieldName]: added}, removed && {[fieldName]: removed});
-  }
-  const updateFieldFromInput = (fieldName: string) => (e) => {
-      updateField(fieldName)(e.target.value)
+    updateNetwork({[fieldName]: added}, removed && {[fieldName]: removed});
   }
 
   React.useEffect(()=>{
@@ -23,11 +30,15 @@ export const NetworkEditor: React.FC = () => {
   }, [stack]);
 
   return (
-    network && <>
-      <Input placeholder="name" value={networkId} />
-      <Input placeholder="driver" value={network.driver} />
-      <Switch checked={network.attachable}/> Attachable<br />
-      <Switch checked={network.internal} /> Internal
+    network && <> {
+      <SimpleEditorContainer>
+        <SimpleEditor name="Name" value={networkId} onChange={renameNetwork} />
+        <SimpleEditor name="Driver" value={network.driver} onChange={updateField('driver')} />
+        <SwitchEditor name="Attachable" value={network.attachable} onChange={updateField('attachable')} />
+        <SwitchEditor name="Internal" value={network.internal} onChange={updateField('internal')} /> 
+      </SimpleEditorContainer>
+    }
+
 
     </>
   );

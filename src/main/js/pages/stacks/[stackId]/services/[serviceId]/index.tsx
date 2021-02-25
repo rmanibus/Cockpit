@@ -33,9 +33,11 @@ const Service: React.FC<PageProps> = ({ setHeader }) => {
       });
   }, [data, type, serviceId]);
 
-  return <>{stack && <ServiceEditor />}
-        <Drawer title="Service history" width={720} onClose={onClose} visible={visible} bodyStyle={{ paddingBottom: 80 }}></Drawer>
-
-  </>;
+  return (
+    <>
+      {stack && <ServiceEditor />}
+      <Drawer title="Service history" width={720} onClose={onClose} visible={visible} bodyStyle={{ paddingBottom: 80 }}></Drawer>
+    </>
+  );
 };
 export default Service;

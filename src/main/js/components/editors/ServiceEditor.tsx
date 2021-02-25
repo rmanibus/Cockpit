@@ -1,13 +1,14 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Form, Row, Col, Divider, Descriptions } from 'antd';
+import { Row, Col, Divider } from 'antd';
 import { StackContext, StackContextValue } from '../../contexts/StackContext';
 import { LabelsEditor } from './LabelEditor';
 import { EnvironmentEditor } from './EnvironmentEditor';
 import { DockerService } from '../../types/DockerStack';
-import { SimpleEditor, SimpleEditorProps } from './SimpleEditor';
+import { SimpleEditor } from './SimpleEditor';
 import { ListEditor } from './ListEditor';
 import { SelectEditor } from './SelectEditor';
+import { SimpleEditorContainer } from './SimpleEditorContainer';
 
 export const ServiceEditor: React.FC = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ export const ServiceEditor: React.FC = () => {
       {service && (
         <>
           <h2>General</h2>
-          <SimpleEditoContainer>
+          <SimpleEditorContainer>
             <SimpleEditor name="name" value={serviceId} onChange={renameService} />
             <SimpleEditor name="image" value={service.image && service.image.split(':')[0]} />
             <SimpleEditor name="tag" value={(service.image && service.image.split(':')[1]) || 'latest'} />
@@ -46,15 +47,15 @@ export const ServiceEditor: React.FC = () => {
             <ListEditor name="dns" value={service.dns} update={updateField('dns')} />
             <ListEditor name="dns search" value={service.dns_search} update={updateField('dns_search')} />
             <SelectEditor name="Depends on" list={service.depends_on} onChange={updateField('depends_on')} choices={Object.keys(stack.services)} />
-          </SimpleEditoContainer>
+          </SimpleEditorContainer>
           <Divider />
           <h2>Build</h2>
           <Row justify="end">
             <Col span={23}>
-              <SimpleEditoContainer>
+              <SimpleEditorContainer>
                 <SimpleEditor name="Context" value={service.build && service.build.context} onChange={updateBuildField('context')} />
                 <SimpleEditor name="Dockerfile" value={service.build && service.build.dockerfile} onChange={updateBuildField('dockerfile')} />
-              </SimpleEditoContainer>
+              </SimpleEditorContainer>
             </Col>
           </Row>
           <Divider />
@@ -68,48 +69,3 @@ export const ServiceEditor: React.FC = () => {
   );
 };
 
-export const SimpleEditoContainer: React.FC = ({ children }) => {
-  return (
-    <Form
-      labelAlign="left"
-      labelCol={{
-        xs: { span: 24 },
-        sm: { span: 8 },
-        md: { span: 6 },
-        lg: { span: 4 },
-        xl: { span: 3 },
-        style: {
-          paddingLeft: '10px',
-          backgroundColor: 'rgb(250, 250, 250)',
-          borderWidth: '1px',
-          borderStyle: 'solid',
-          borderColor: 'rgb(240, 240, 240)',
-        },
-      }}
-      wrapperCol={{
-        xs: { span: 24 },
-        sm: { span: 16 },
-        md: { span: 18 },
-        lg: { span: 20 },
-        xl: { span: 21 },
-      }}
-      layout="horizontal"
-    >
-      {[].concat(children).map((item) => {
-        const { name } = item.props;
-        return <SimpleEditorItem name={name}>{item}</SimpleEditorItem>;
-      })}
-    </Form>
-  );
-};
-
-type SimpleEditorItemProps = {
-  name: string;
-};
-export const SimpleEditorItem: React.FC<SimpleEditorItemProps> = ({ name, children }) => {
-  return (
-    <Form.Item label={name} style={{ padding: '5px', marginBottom: '0', borderWidth: '1px', borderStyle: 'solid', borderColor: 'rgb(240, 240, 240)' }}>
-      {children}
-    </Form.Item>
-  );
-};
