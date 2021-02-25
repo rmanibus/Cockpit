@@ -5,9 +5,10 @@ export type SimpleFieldProps = {
   value: string;
   name: string;
   onChange: (newValue: string) => void;
+  [other :string]: any;
 };
 
-export const SimpleEditor: React.FC<SimpleFieldProps> = ({ name, value, onChange }) => {
+export const SimpleEditor: React.FC<SimpleFieldProps> = ({ name, value, onChange, ...otherProps }) => {
   const [active, setActive] = React.useState(false);
   const ref = React.useRef(null);
   const eventAdapter = (fun: (param: string) => any) => {
@@ -22,7 +23,6 @@ export const SimpleEditor: React.FC<SimpleFieldProps> = ({ name, value, onChange
 
   React.useEffect(() => {
     function handleClickOutside(event) {
-      console.log(ref.current);
       if (ref.current && !ref.current.input.contains(event.target)) {
         deActivate();
       }
@@ -35,7 +35,7 @@ export const SimpleEditor: React.FC<SimpleFieldProps> = ({ name, value, onChange
 
   if (!active) {
     return (
-      <div style={{ width: '100%', minHeight: '30px' }} onClick={activate}>
+      <div {...otherProps} style={{ width: '100%', minHeight: '30px' }} onClick={activate}>
         {value}
       </div>
     );

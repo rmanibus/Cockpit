@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Table, Space } from 'antd';
+import { Button, Input, Table, Space } from 'antd';
 import { PlusOutlined, DeleteOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { SimpleEditor } from './SimpleEditor';
 import { isArray } from 'lodash';
@@ -13,26 +13,24 @@ type ArrayFieldProps = {
 export const ListEditor: React.FC<ArrayFieldProps> = ({ name, value, update }) => {
 
   const convertToArray = () => {
-    update([value as string]);
+    update([value as string || "" ]);
   };
-  const addItem = () => {
-    const newList = [...value as string[], ''];
-    update(newList);
-  };
+  React.useEffect(() => {
+    isArray(value) && value.length === 0 && update("");
+  }, [value]);
 
   if (!value || !isArray(value)) {
     return (
-      <>
-        <SimpleEditor name={name} value={value as string} onChange={update} />
-        <Button shape="circle">
+      <div style={{display: 'flex', flexDirection: 'row'}}>
+        <SimpleEditor style={{flexGrow: '1'}} name={name} value={value as string} onChange={update} />
+        <Button style={{marginLeft: '10px',float: 'right'}} shape="circle">
           <UnorderedListOutlined onClick={convertToArray} />
         </Button>
-      </>
+      </div>
     );
   }
   return (
     <>
-      <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />
       <ListTable name={name} list={value as string[]} update={update} />
     </>
   );
@@ -49,13 +47,15 @@ export const ListTable: React.FC<ListProps> = ({ name, list, update }: ListProps
     newList[index] = key;
     update(newList);
   };
-
+  const addItem = () => {
+    const newList = [...list, ''];
+    update(newList);
+  };
   const removeItem = (index) => () => {
     const newList = [];
     newList[index] = list[index];
     update([], newList);
   };
-
   const columns = [
     {
       title: 'Value',
@@ -63,7 +63,7 @@ export const ListTable: React.FC<ListProps> = ({ name, list, update }: ListProps
       render: (value, item) => <SimpleEditor name={item.index} value={value} onChange={updateItem(item.index)}></SimpleEditor>,
     },
     {
-      title: 'Actions',
+      title: <Button type="primary" shape="circle" icon={<PlusOutlined />} onClick={addItem} />,
       key: 'actions',
       render: (text, item) => (
         <Space>
