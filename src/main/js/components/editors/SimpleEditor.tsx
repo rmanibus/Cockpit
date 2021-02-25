@@ -1,14 +1,14 @@
 import React from 'react';
 import { Input } from 'antd';
 
-export type SimpleFieldProps = {
+export type SimpleEditorProps = {
   value: string;
   name: string;
   onChange: (newValue: string) => void;
   [other :string]: any;
 };
 
-export const SimpleEditor: React.FC<SimpleFieldProps> = ({ name, value, onChange, ...otherProps }) => {
+export const SimpleEditor: React.FC<SimpleEditorProps> = ({ name, value, onChange, ...otherProps }) => {
   const [active, setActive] = React.useState(false);
   const ref = React.useRef(null);
   const eventAdapter = (fun: (param: string) => any) => {
@@ -35,7 +35,7 @@ export const SimpleEditor: React.FC<SimpleFieldProps> = ({ name, value, onChange
 
   if (!active) {
     return (
-      <div {...otherProps} style={{ width: '100%', minHeight: '30px' }} onClick={activate}>
+      <div {...otherProps} style={{ lineHeight: '2em', paddingLeft: '12px', width: '100%', minHeight: '30px' }} onClick={activate}>
         {value}
       </div>
     );
