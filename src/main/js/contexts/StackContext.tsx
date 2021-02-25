@@ -4,8 +4,7 @@ import yaml from 'js-yaml';
 import api from '../api';
 import { DockerStack } from '../types/DockerStack';
 import { DataContext, DataContextValue } from './DataContext';
-import { merge, isObject, isArray, compact } from 'lodash';
-import { BoldOutlined, FileAddFilled } from '@ant-design/icons';
+import { merge, isObject, isArray, compact, isEmpty } from 'lodash';
 
 export interface StackContextValue {
     originalStack: DockerStack;
@@ -45,10 +44,10 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
 
     const baseupdate = (added, removed = {}) => {
         var newStack = {...stack};
-        if(added){
+        if(!isEmpty(added)){
             newStack = computeAdded(newStack, added);
         }
-        if(removed){
+        if(!isEmpty(removed)){
             newStack = computeRemoved(newStack, removed);
         }
         setStack(newStack);
@@ -58,7 +57,7 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
         return merge(stack, added)
     };
     const computeRemoved = (stack, removed) => {
-        if(!removed) return stack;
+        if(isEmpty(removed)) return stack;
         
         const newStack = isArray(stack) ? []: {};
 

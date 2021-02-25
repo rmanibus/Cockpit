@@ -24,7 +24,6 @@ export const ServiceEditor: React.FC = () => {
   const updateField = (fieldName: string) => (added, removed = null) => {
     updateService({ [fieldName]: added }, removed && { [fieldName]: removed });
   };
-
   const updateBuildField = (fieldName: string) => (added, removed = null) => {
     updateField('build')({ [fieldName]: added }, removed && { [fieldName]: removed });
   };
@@ -34,7 +33,6 @@ export const ServiceEditor: React.FC = () => {
   React.useEffect(() => {
     setService(stack.services[serviceId]);
   }, [stack, serviceId]);
-
   return (
       <>
       {service && (
@@ -54,7 +52,7 @@ export const ServiceEditor: React.FC = () => {
             <Input placeholder="user" value={service.user} onChange={eventAdapter(updateField('user'))} />
           </Descriptions.Item>
           <Descriptions.Item label="Depends On">
-            <Select placeholder="depends on" mode="multiple" allowClear style={{ width: '100%' }}>
+            <Select placeholder="Depends on" mode="multiple" allowClear style={{ width: '100%' }} onChange={(value) => updateField('depends_on')(value)} >
               {Object.keys(stack.services).map((service) => (
                 <Option value={service}>{service}</Option>
               ))}
