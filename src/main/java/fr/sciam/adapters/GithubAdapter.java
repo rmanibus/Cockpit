@@ -16,4 +16,9 @@ public class GithubAdapter implements GitAdapter {
     public List<GitProject> listProject() {
         return Collections.emptyList();
     }
+
+    @Override
+    public String getFileContent(String project, String fileName) {
+        return "";
+    }
 }

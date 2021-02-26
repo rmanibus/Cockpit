@@ -8,4 +8,5 @@ import java.util.List;
 public interface GitAdapter {
 
     List<GitProject> listProject() throws GitLabApiException;
+    String getFileContent(String project, String fileName);
 }

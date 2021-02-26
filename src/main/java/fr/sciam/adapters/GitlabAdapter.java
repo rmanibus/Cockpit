@@ -5,7 +5,9 @@ import fr.sciam.model.SourceEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.RepositoryFile;
 
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +24,6 @@ public class GitlabAdapter implements GitAdapter{
 
     @Override
     public List<GitProject> listProject() throws GitLabApiException {
-        log.info("{}", api.getProjectApi().getProjects().get(0).toString());
         try {
             return api.getProjectApi()
                     .getProjects()
@@ -33,6 +34,17 @@ public class GitlabAdapter implements GitAdapter{
             log.error("failed to fetch projects: ", e);
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public String getFileContent(String project, String fileName) {
+        try {
+            RepositoryFile repoFile = api.getRepositoryFileApi().getFile(project, fileName, "master", true);
+            return new String (Base64.getDecoder().decode(repoFile.getContent()));
+        } catch (GitLabApiException | IllegalArgumentException e) {
+            log.error("failed to fetch file content: ", e);
+        }
+        return "";
     }
 
     private GitLabApi createApi(SourceEntity source){
