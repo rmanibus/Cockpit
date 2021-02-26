@@ -1,11 +1,11 @@
 import React from "react";
-
-import { Switch } from "antd";
 import { StackContext, StackContextValue } from '../../contexts/StackContext';
 import { DockerNetworkDef} from '../../types/DockerStack';
 import { SimpleEditorContainer } from './SimpleEditorContainer';
 import { SimpleEditor } from './SimpleEditor';
 import { SwitchEditor } from './SwitchEditor';
+import { SelectEditor } from './SelectEditor';
+
 import { useRouter } from 'next/router';
 
 export const NetworkEditor: React.FC = () => {
@@ -34,7 +34,7 @@ export const NetworkEditor: React.FC = () => {
       network && 
       <SimpleEditorContainer>
         <SimpleEditor name="Name" value={networkId} onChange={renameNetwork} />
-        <SimpleEditor name="Driver" value={network.driver} onChange={updateField('driver')} />
+        <SelectEditor name="Driver" value={network.driver} onChange={updateField('driver')} choices={['overlay', 'bridge']} />
         <SwitchEditor name="Attachable" value={network.attachable} onChange={updateField('attachable')} />
         <SwitchEditor name="Internal" value={network.internal} onChange={updateField('internal')} /> 
       </SimpleEditorContainer>
