@@ -4,6 +4,8 @@ import com.blazebit.persistence.integration.jaxrs.EntityViewId;
 import com.blazebit.persistence.view.EntityViewManager;
 import fr.sciam.model.StackEntity;
 import fr.sciam.views.StackCreateView;
+import org.gitlab4j.api.GitLabApi;
+import org.gitlab4j.api.GitLabApiClient;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -51,6 +53,7 @@ public class StackController {
     @Path("{id}/compose")
     @Produces(MediaType.TEXT_PLAIN)
     public Response compose(@PathParam("id") UUID id) {
+
         return Response.ok(dockerCompose).build();
     }
 

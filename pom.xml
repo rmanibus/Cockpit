@@ -53,6 +53,10 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm-rest-data-panache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>
     <dependency>
@@ -69,7 +73,11 @@
       <artifactId>blaze-persistence-integration-jaxrs</artifactId>
       <version>1.6.0-Alpha2</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.gitlab4j</groupId>
+      <artifactId>gitlab4j-api</artifactId>
+      <version>4.15.7</version>
+    </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>

@@ -38,10 +38,11 @@ export const StacksView: React.FC = () => {
       title: 'Source',
       key: 'source',
       dataIndex: 'source',
-      render: (source) => (
-        <Tag color={sourceTypes[source.type].color}>
+      render: (source, item) => (
+        <><Tag color={sourceTypes[source.type].color}>
           {React.createElement(sourceTypes[source.type].icon)} {source.name}
-        </Tag>
+        </Tag> {item.path}
+        </>
       ),
     },
     {

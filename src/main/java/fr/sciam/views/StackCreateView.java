@@ -20,6 +20,10 @@ public interface StackCreateView {
 
     void setName(String name);
 
+    String getPath();
+
+    void setPath(String path);
+
     StackType getType();
 
     void setType(StackType stackType);

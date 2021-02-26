@@ -14,6 +14,8 @@ public class StackEntity extends BaseUuidEntity {
 
     @Column(length = 255)
     String name;
+    @Column(length = 255)
+    String path;
     @Column(length = 10)
     @Enumerated(EnumType.STRING)
     StackType type;

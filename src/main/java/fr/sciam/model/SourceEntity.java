@@ -21,7 +21,7 @@ public class SourceEntity extends BaseUuidEntity {
     String name;
     @Column(length = 255)
     String location;
-    @JsonIgnore()
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(length = 255)
     String secret;
     @JsonIgnore()
