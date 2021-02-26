@@ -1,7 +1,9 @@
 import React from 'react';
 import api from 'api';
 import { StackContext, StackContextValue } from 'contexts/StackContext';
-import { Timeline, message } from 'antd';
+import { Timeline, Typography, message } from 'antd';
+const { Text, Link } = Typography;
+import moment from "moment";
 
 export const HistoryView: React.FC = () => {
   const { stackId } = React.useContext<StackContextValue>(StackContext);
@@ -17,9 +19,15 @@ export const HistoryView: React.FC = () => {
       });
   }, [stackId]);
   return (
-    <Timeline>
+    <Timeline mode="right">
       {history.map((item) => (
-        <Timeline.Item>{item.name} {item.id}</Timeline.Item>
+        <Timeline.Item label={moment(item.date).format("LLLL")}>
+          {item.message}
+          <br />
+          {item.author.name} ({item.author.email})
+          <br />
+          <Text type="secondary">{item.id}</Text>
+        </Timeline.Item>
       ))}
     </Timeline>
   );

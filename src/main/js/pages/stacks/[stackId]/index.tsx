@@ -36,7 +36,7 @@ const Stack: React.FC<PageProps> = ({ setHeader }) => {
   return (
     <>
       {stack && <StackView />}
-      <Drawer title="Stack history" width={720} onClose={onClose} visible={visible} bodyStyle={{ paddingBottom: 80 }}>
+      <Drawer title="Stack history" width={720} destroyOnClose onClose={onClose} visible={visible} bodyStyle={{ paddingBottom: 80 }}>
         <HistoryView/>
       </Drawer>
     </>

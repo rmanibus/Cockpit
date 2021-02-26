@@ -37,7 +37,7 @@ const Service: React.FC<PageProps> = ({ setHeader }) => {
   return (
     <>
       {stack && <ServiceEditor />}
-      <Drawer title="Service history" width={720} onClose={onClose} visible={visible} bodyStyle={{ paddingBottom: 80 }}>
+      <Drawer title="Service history" width={720} onClose={onClose} destroyOnClose visible={visible} bodyStyle={{ paddingBottom: 80 }}>
         <HistoryView/>
       </Drawer>
     </>

@@ -7,7 +7,6 @@ import { sourceTypes, stackTypes, commitModes } from 'translations/constants';
 import { DataContext } from 'contexts/DataContext';
 import { Stack } from 'types/Stack';
 
-
 export const StacksView: React.FC = () => {
   const router = useRouter();
   const { listData } = React.useContext(DataContext);
@@ -26,10 +25,9 @@ export const StacksView: React.FC = () => {
       title: 'Type',
       dataIndex: 'type',
       render: (type, item) => (
-        <><Tag color={stackTypes[type].color}>
-           {stackTypes[type].text}
-        </Tag>
-        {React.createElement(commitModes[item.commitMode].icon)}
+        <>
+          <Tag color={stackTypes[type].color}>{stackTypes[type].text}</Tag>
+          {React.createElement(commitModes[item.commitMode].icon)}
         </>
       ),
     },
@@ -39,9 +37,11 @@ export const StacksView: React.FC = () => {
       key: 'source',
       dataIndex: 'source',
       render: (source, item) => (
-        <><Tag color={sourceTypes[source.type].color}>
-          {React.createElement(sourceTypes[source.type].icon)} {source.name}
-        </Tag> {item.path}
+        <>
+          <Tag color={sourceTypes[source.type].color}>
+            {React.createElement(sourceTypes[source.type].icon)} {source.name}
+          </Tag>{' '}
+          {item.path}
         </>
       ),
     },
@@ -52,9 +52,7 @@ export const StacksView: React.FC = () => {
     },
   ];
 
-  return (
-      <Table columns={columns} dataSource={listData} />
-  );
+  return <Table columns={columns} dataSource={listData} />;
 };
 
 type StackItemProps = {
