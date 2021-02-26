@@ -5,6 +5,7 @@ import { StackView } from 'components/views/StackView';
 import { StackContext, StackContextValue } from 'contexts/StackContext';
 import { DataContext, DataContextValue } from 'contexts/DataContext';
 import { PageProps } from 'types/Props';
+import { HistoryView } from 'components/views/HistoryView';
 
 const Stack: React.FC<PageProps> = ({ setHeader }) => {
   const { data, type } = React.useContext<DataContextValue>(DataContext);
@@ -35,7 +36,9 @@ const Stack: React.FC<PageProps> = ({ setHeader }) => {
   return (
     <>
       {stack && <StackView />}
-      <Drawer title="Stack history" width={720} onClose={onClose} visible={visible} bodyStyle={{ paddingBottom: 80 }}></Drawer>
+      <Drawer title="Stack history" width={720} onClose={onClose} visible={visible} bodyStyle={{ paddingBottom: 80 }}>
+        <HistoryView/>
+      </Drawer>
     </>
   );
 };

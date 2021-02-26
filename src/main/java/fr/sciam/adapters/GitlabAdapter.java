@@ -1,5 +1,6 @@
 package fr.sciam.adapters;
 
+import fr.sciam.model.GitCommit;
 import fr.sciam.model.GitProject;
 import fr.sciam.model.SourceEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,18 @@ public class GitlabAdapter implements GitAdapter{
             log.error("failed to fetch file content: ", e);
         }
         return "";
+    }
+
+    public List<GitCommit> getHistory(String project) {
+        try {
+            return api.getRepositoryApi()
+                    .getTree(project).stream()
+                    .map(item -> new GitCommit(item.getName(), item.getId()))
+                    .collect(Collectors.toList());
+        } catch (GitLabApiException e) {
+            log.error("failed to fetch history: ", e);
+        }
+        return Collections.emptyList();
     }
 
     private GitLabApi createApi(SourceEntity source){

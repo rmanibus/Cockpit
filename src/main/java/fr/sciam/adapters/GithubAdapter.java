@@ -1,5 +1,6 @@
 package fr.sciam.adapters;
 
+import fr.sciam.model.GitCommit;
 import fr.sciam.model.GitProject;
 import fr.sciam.model.SourceEntity;
 
@@ -20,5 +21,10 @@ public class GithubAdapter implements GitAdapter {
     @Override
     public String getFileContent(String project, String fileName) {
         return "";
+    }
+
+    @Override
+    public List<GitCommit> getHistory(String project) {
+        return Collections.emptyList();
     }
 }

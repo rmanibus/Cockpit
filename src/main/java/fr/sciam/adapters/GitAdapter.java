@@ -1,5 +1,6 @@
 package fr.sciam.adapters;
 
+import fr.sciam.model.GitCommit;
 import fr.sciam.model.GitProject;
 import org.gitlab4j.api.GitLabApiException;
 
@@ -9,4 +10,5 @@ public interface GitAdapter {
 
     List<GitProject> listProject() throws GitLabApiException;
     String getFileContent(String project, String fileName);
+    List<GitCommit> getHistory(String project);
 }

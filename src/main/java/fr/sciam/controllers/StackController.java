@@ -64,7 +64,17 @@ public class StackController {
         GitAdapter gitAdapter = gitAdapterFactory.getSourceAdapter(stack.getSource());
         return Response.ok(gitAdapter.getFileContent(stack.getPath(), "docker-compose.yml")).build();
     }
-
+    @GET
+    @Transactional
+    @Path("{id}/history")
+    public Response history(@PathParam("id") UUID id) {
+        StackEntity stack = StackEntity.findById(id);
+        if(stack == null){
+            throw new NotFoundException();
+        }
+        GitAdapter gitAdapter = gitAdapterFactory.getSourceAdapter(stack.getSource());
+        return Response.ok(gitAdapter.getHistory(stack.getPath())).build();
+    }
     @DELETE
     @Transactional
     @Path("{id}")
