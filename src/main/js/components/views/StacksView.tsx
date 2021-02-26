@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Table, Button, Tag, message, Drawer, Space, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { EditStackForm } from '../forms/StackForm';
-import { sourceTypes } from 'translations/Source';
+import { sourceTypes } from 'translations/constants';
 import { DataContext } from 'contexts/DataContext';
 import { Stack } from 'types/Stack';
 

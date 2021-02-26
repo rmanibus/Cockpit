@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Input, Button, Select, message } from 'antd';
 import { DataContext } from 'contexts/DataContext';
-import { sourceTypes } from 'translations/Source';
+import { sourceTypes } from 'translations/constants';
 import { Source } from 'types/Source';
 const { Option } = Select;
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Form, Input, Button, Select, message } from 'antd';
-import { DataContext } from '../../contexts/DataContext';
-import { sourceTypes } from '../../translations/Source';
-import { Stack } from '../../types/Stack';
-import api from '../../api';
+import { DataContext } from 'contexts/DataContext';
+import { sourceTypes, commitModes, deployModes, stackTypes } from 'translations/constants';
+import { Stack } from 'types/Stack';
+import api from 'api';
 
 const { Option } = Select;
 
@@ -70,6 +70,21 @@ export const StackForm: React.FC<StackFormProps> = ({ data, onFinish }) => {
       <Form.Item name="source" rules={[{ required: true, message: 'Please input stack source !' }]}>
         <Select placeholder="Please select a source">
             {sources.map((source) => <Option value={source.id}>{React.createElement(sourceTypes[source.type].icon)} {source.name}</Option>)};
+        </Select>
+      </Form.Item>
+      <Form.Item name="type" rules={[{ required: true, message: 'Please input source type!' }]}>
+        <Select placeholder="Please select a stack type">
+            {Object.keys(stackTypes).map((key) => <Option value={key}>{stackTypes[key].text}</Option>)};
+        </Select>
+      </Form.Item>
+      <Form.Item name="commit_mode" rules={[{ required: true, message: 'Please input source type!' }]}>
+        <Select placeholder="Please select a commit mode">
+            {Object.keys(commitModes).map((key) => <Option value={key}>{React.createElement(commitModes[key].icon)} {commitModes[key].text}</Option>)};
+        </Select>
+      </Form.Item>
+      <Form.Item name="deploy_mode" rules={[{ required: true, message: 'Please input source type!' }]}>
+        <Select placeholder="Please select a deploy mode">
+            {Object.keys(deployModes).map((key) => <Option value={key}>{deployModes[key].text}</Option>)};
         </Select>
       </Form.Item>
       <Form.Item>
