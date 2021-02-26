@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form, Input, Button, Select, message } from 'antd';
-import { DataContext } from '../../contexts/DataContext';
-import { sourceTypes } from '../../translations/Source';
-import { Source } from '../../types/Source';
+import { DataContext } from 'contexts/DataContext';
+import { sourceTypes } from 'translations/Source';
+import { Source } from 'types/Source';
 const { Option } = Select;
 
 type EditSourceFormProps = {

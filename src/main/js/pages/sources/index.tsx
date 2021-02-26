@@ -1,10 +1,10 @@
 import React from 'react';
 import { Drawer, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { SourcesView } from '../../components/views/SourcesView';
-import { CreateSourceForm } from '../../components/forms/SourceForm'
-import { DataContext } from '../../contexts/DataContext';
-import { PageProps } from '../../types/Props';
+import { SourcesView } from 'components/views/SourcesView';
+import { CreateSourceForm } from 'components/forms/SourceForm'
+import { DataContext } from 'contexts/DataContext';
+import { PageProps } from 'types/Props';
 
 const Sources: React.FC<PageProps> = ({setHeader}) => {
     const { setPath, type } = React.useContext(DataContext);

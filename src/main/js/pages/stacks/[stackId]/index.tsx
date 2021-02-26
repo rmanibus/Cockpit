@@ -1,10 +1,10 @@
 import React from 'react';
 import { Drawer, Button } from 'antd';
 import { HistoryOutlined } from '@ant-design/icons';
-import { StackView } from '../../../components/views/StackView';
-import { StackContext, StackContextValue } from '../../../contexts/StackContext';
-import { DataContext, DataContextValue } from '../../../contexts/DataContext';
-import { PageProps } from '../../../types/Props';
+import { StackView } from 'components/views/StackView';
+import { StackContext, StackContextValue } from 'contexts/StackContext';
+import { DataContext, DataContextValue } from 'contexts/DataContext';
+import { PageProps } from 'types/Props';
 
 const Stack: React.FC<PageProps> = ({ setHeader }) => {
   const { data, type } = React.useContext<DataContextValue>(DataContext);

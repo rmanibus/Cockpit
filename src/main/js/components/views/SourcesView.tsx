@@ -2,9 +2,9 @@ import React from 'react';
 import { Table, Space, Button, Tag, message, Drawer, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { EditSourceForm } from '../forms/SourceForm';
-import { sourceTypes } from '../../translations/Source';
-import { DataContext } from '../../contexts/DataContext';
-import { Source } from '../../types/Source';
+import { sourceTypes } from 'translations/Source';
+import { DataContext } from 'contexts/DataContext';
+import { Source } from 'types/Source';
 
 export const SourcesView: React.FC = () => {
   const { listData } = React.useContext(DataContext);

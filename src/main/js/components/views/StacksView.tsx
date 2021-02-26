@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import { Table, Button, Tag, message, Drawer, Space, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { EditStackForm } from '../forms/StackForm';
-import { sourceTypes } from '../../translations/Source';
-import { DataContext } from '../../contexts/DataContext';
-import { Stack } from '../../types/Stack';
+import { sourceTypes } from 'translations/Source';
+import { DataContext } from 'contexts/DataContext';
+import { Stack } from 'types/Stack';
 
 
 export const StacksView: React.FC = () => {

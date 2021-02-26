@@ -1,10 +1,10 @@
 import React from 'react';
 import { Drawer, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { StacksView } from '../../components/views/StacksView';
-import { CreateStackForm } from '../../components/forms/StackForm'
-import { DataContext } from '../../contexts/DataContext';
-import { PageProps } from '../../types/Props';
+import { StacksView } from 'components/views/StacksView';
+import { CreateStackForm } from 'components/forms/StackForm'
+import { DataContext } from 'contexts/DataContext';
+import { PageProps } from 'types/Props';
 
 
 const Stacks: React.FC<PageProps> = ({setHeader}) => {

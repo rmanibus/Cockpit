@@ -1,10 +1,10 @@
 import React from 'react';
 import { Drawer, Button } from 'antd';
 import { HistoryOutlined } from '@ant-design/icons';
-import { ServiceEditor } from '../../../../../components/editors/ServiceEditor';
-import { StackContext, StackContextValue } from '../../../../../contexts/StackContext';
-import { DataContext, DataContextValue } from '../../../../../contexts/DataContext';
-import { PageProps } from '../../../../../types/Props';
+import { ServiceEditor } from 'components/editors/ServiceEditor';
+import { StackContext, StackContextValue } from 'contexts/StackContext';
+import { DataContext, DataContextValue } from 'contexts/DataContext';
+import { PageProps } from 'types/Props';
 
 const Service: React.FC<PageProps> = ({ setHeader }) => {
   const { data, type } = React.useContext<DataContextValue>(DataContext);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageProps } from '../types/Props';
+import { PageProps } from 'types/Props';
 
 const Home: React.FC<PageProps> = ({setHeader}) => {
   React.useEffect(() => {

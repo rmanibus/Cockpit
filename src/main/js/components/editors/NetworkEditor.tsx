@@ -1,6 +1,6 @@
 import React from "react";
-import { StackContext, StackContextValue } from '../../contexts/StackContext';
-import { DockerNetworkDef} from '../../types/DockerStack';
+import { StackContext, StackContextValue } from 'contexts/StackContext';
+import { DockerNetworkDef} from 'types/DockerStack';
 import { SimpleEditorContainer } from './SimpleEditorContainer';
 import { SimpleEditor } from './SimpleEditor';
 import { SwitchEditor } from './SwitchEditor';

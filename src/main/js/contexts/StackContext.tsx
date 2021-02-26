@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import yaml from 'js-yaml';
-import api from '../api';
-import { DockerStack } from '../types/DockerStack';
+import api from 'api';
+import { DockerStack } from 'types/DockerStack';
 import { DataContext, DataContextValue } from './DataContext';
 import { merge, isObject, isArray, compact, isEmpty } from 'lodash';
 

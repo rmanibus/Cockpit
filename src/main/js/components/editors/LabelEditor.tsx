@@ -7,7 +7,7 @@ import { SwitchEditor } from './SwitchEditor';
 import { SimpleEditorCardContainer } from './SimpleEditorContainer';
 import { SelectEditor } from './SelectEditor';
 import { ListEditor } from './ListEditor';
-import { StackContext, StackContextValue } from '../../contexts/StackContext';
+import { StackContext, StackContextValue } from 'contexts/StackContext';
 
 export const LabelsEditor: React.FC<ListProps<Labels>> = ({ list, update }) => {
   const { stack } = React.useContext<StackContextValue>(StackContext);

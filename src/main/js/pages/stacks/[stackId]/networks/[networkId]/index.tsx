@@ -1,8 +1,8 @@
 import React from 'react';
-import { NetworkEditor } from '../../../../../components/editors/NetworkEditor';
-import { StackContext, StackContextValue } from '../../../../../contexts/StackContext';
-import { DataContext, DataContextValue } from '../../../../../contexts/DataContext';
-import { PageProps } from '../../../../../types/Props';
+import { NetworkEditor } from 'components/editors/NetworkEditor';
+import { StackContext, StackContextValue } from 'contexts/StackContext';
+import { DataContext, DataContextValue } from 'contexts/DataContext';
+import { PageProps } from 'types/Props';
 
 const Network: React.FC<PageProps> = ({ setHeader }) => {
   const { data, type } = React.useContext<DataContextValue>(DataContext);

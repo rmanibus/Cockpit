@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Layout, Menu, Breadcrumb, Button, Space, PageHeader, Drawer } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
-import { StackContext, StackContextValue } from '../contexts/StackContext';
+import { StackContext, StackContextValue } from 'contexts/StackContext';
 import { ChangesView} from './views/ChangesView';
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -12,13 +12,14 @@ type BaseLayoutProps = {
 };
 export type Header = {
     title: string;
-    extra: React.ReactNode;
+    extra?: React.ReactNode;
     breadcrumb: Array<Crumb>;
 }
 type Crumb = {
   path: string;
   breadcrumbName: string;
 }
+
 export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
   const router = useRouter();
   const [collapsed, setCollapsed] = React.useState(false);

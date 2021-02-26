@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Table, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { StackContext, StackContextValue } from '../../contexts/StackContext';
+import { StackContext, StackContextValue } from 'contexts/StackContext';
 
 export const VolumesListView: React.FC = () => {
   const { stack, stackId } = React.useContext<StackContextValue>(StackContext);
