@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Table, Button, Tag, message, Drawer, Space, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { EditStackForm } from '../forms/StackForm';
-import { sourceTypes } from 'translations/constants';
+import { sourceTypes, stackTypes, commitModes } from 'translations/constants';
 import { DataContext } from 'contexts/DataContext';
 import { Stack } from 'types/Stack';
 
@@ -19,8 +19,19 @@ export const StacksView: React.FC = () => {
       onCell: onCell,
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
       render: (text) => <a>{text}</a>,
+    },
+    {
+      onCell: onCell,
+      title: 'Type',
+      dataIndex: 'type',
+      render: (type, item) => (
+        <><Tag color={stackTypes[type].color}>
+           {stackTypes[type].text}
+        </Tag>
+        {React.createElement(commitModes[item.commitMode].icon)}
+        </>
+      ),
     },
     {
       onCell: onCell,
@@ -29,7 +40,7 @@ export const StacksView: React.FC = () => {
       dataIndex: 'source',
       render: (source) => (
         <Tag color={sourceTypes[source.type].color}>
-          {React.createElement(sourceTypes[source.type].icon)} {sourceTypes[source.type].text}
+          {React.createElement(sourceTypes[source.type].icon)} {source.name}
         </Tag>
       ),
     },
