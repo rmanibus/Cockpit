@@ -2,8 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Table, Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Stack } from '../../types/Stack';
-import { StackContext, StackContextValue } from '../../contexts/StackContext';
+import { StackContext, StackContextValue } from 'contexts/StackContext';
 
 export const NetworksListView: React.FC = () => {
   const { stack, stackId } = React.useContext<StackContextValue>(StackContext);

@@ -1,6 +1,6 @@
 import api from 'api';
 
-test('adds 1 + 2 to equal 3', () => {
+test('test if jest is working', () => {
     console.log(api)
     expect(3).toBe(3);
 });
