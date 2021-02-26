@@ -8,8 +8,8 @@ export const sourceTypes: SourceTypes = {
 }
 
 export const stackTypes = {
-    DOCKER_COMPOSE: {color: 'blue', text: 'Docker Compose'},
-    SWARM: {color: 'blue', text: 'Swarn'},
+    COMPOSE: {color: 'blue', text: 'Docker Compose'},
+    SWARM: {color: 'blue', text: 'Swarm'},
     K8S: {color: 'blue', text: 'Kubernetes'},
 }
 

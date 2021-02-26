@@ -77,12 +77,12 @@ export const StackForm: React.FC<StackFormProps> = ({ data, onFinish }) => {
             {Object.keys(stackTypes).map((key) => <Option value={key}>{stackTypes[key].text}</Option>)};
         </Select>
       </Form.Item>
-      <Form.Item name="commit_mode" rules={[{ required: true, message: 'Please input source type!' }]}>
+      <Form.Item name="commitMode" rules={[{ required: true, message: 'Please input source type!' }]}>
         <Select placeholder="Please select a commit mode">
             {Object.keys(commitModes).map((key) => <Option value={key}>{React.createElement(commitModes[key].icon)} {commitModes[key].text}</Option>)};
         </Select>
       </Form.Item>
-      <Form.Item name="deploy_mode" rules={[{ required: true, message: 'Please input source type!' }]}>
+      <Form.Item name="deployMode" rules={[{ required: true, message: 'Please input source type!' }]}>
         <Select placeholder="Please select a deploy mode">
             {Object.keys(deployModes).map((key) => <Option value={key}>{deployModes[key].text}</Option>)};
         </Select>
