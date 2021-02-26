@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input, Table, Space } from 'antd';
+import { Button, Table, Space } from 'antd';
 import { PlusOutlined, DeleteOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { SimpleEditor } from './SimpleEditor';
 import { isArray } from 'lodash';
