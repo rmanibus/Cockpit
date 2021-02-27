@@ -29,7 +29,12 @@ public class GithubAdapter implements GitAdapter {
     }
 
     @Override
-    public void updateFileContent(String project, String fileName, String content, String message) {
+    public void commit(String project, String branch, String fileName, String content, String message) {
+
+    }
+
+    @Override
+    public void pullRequest(String project, String sourceBranch, String targetBranch) {
 
     }
 }

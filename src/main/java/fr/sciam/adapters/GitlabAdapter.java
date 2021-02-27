@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.Constants;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.MergeRequestParams;
 import org.gitlab4j.api.models.RepositoryFile;
 
 import javax.ws.rs.InternalServerErrorException;
@@ -68,13 +69,26 @@ public class GitlabAdapter implements GitAdapter {
         }
     }
 
-    public void updateFileContent(String project, String fileName, String content, String message) {
+    public void commit(String project, String branch, String fileName, String content, String message) {
         try {
             RepositoryFile repositoryFile = new RepositoryFile();
             repositoryFile.setContent(Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8)));
             repositoryFile.setFilePath(fileName);
             repositoryFile.setEncoding(Constants.Encoding.BASE64);
-            api.getRepositoryFileApi().updateFile(project, repositoryFile, "master", message);
+            api.getRepositoryFileApi().updateFile(project, repositoryFile, branch, message);
+        } catch (GitLabApiException e) {
+            log.error("failed to update: ", e);
+            throw new InternalServerErrorException(e.getMessage());
+        }
+    }
+
+    public void pullRequest(String project, String sourceBranch, String targetBranch) {
+        try {
+            api.getMergeRequestApi().createMergeRequest(project,
+                    new MergeRequestParams()
+                            .withSourceBranch(sourceBranch)
+                            .withTargetBranch(targetBranch));
+
         } catch (GitLabApiException e) {
             log.error("failed to update: ", e);
             throw new InternalServerErrorException(e.getMessage());

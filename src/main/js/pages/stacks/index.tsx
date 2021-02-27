@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, Button } from 'antd';
+import { Spin, Drawer, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { StacksView } from 'components/views/StacksView';
 import { CreateStackForm } from 'components/forms/StackForm'
@@ -8,7 +8,7 @@ import { PageProps } from 'types/Props';
 
 
 const Stacks: React.FC<PageProps> = ({setHeader}) => {
-    const { setPath, type } = React.useContext(DataContext);
+    const { setPath, type, loading } = React.useContext(DataContext);
     const [visible, setVisible] = React.useState(false);
 
     const addItem = () => {
@@ -31,7 +31,7 @@ const Stacks: React.FC<PageProps> = ({setHeader}) => {
     }, []);
 
     return(
-        <>
+        <Spin spinning={loading}>
         { type === "Array<stack>" && <StacksView/> }
         <Drawer
         title="Create a new Stack"
@@ -42,7 +42,7 @@ const Stacks: React.FC<PageProps> = ({setHeader}) => {
       >
         <CreateStackForm afterFinish={onClose} />
       </Drawer>
-      </>
+      </Spin>
     );
 }
 export default Stacks;

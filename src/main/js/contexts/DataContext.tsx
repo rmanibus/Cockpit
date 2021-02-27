@@ -13,6 +13,7 @@ export interface DataContextValue {
     listData: Array<any>;
     data: any;
     type: string;
+    loading: boolean;
 }
 
 export const DataContext = React.createContext<DataContextValue>(null);
@@ -30,7 +31,8 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
     const [listData, setListData] = React.useState([]);
     const [type, setType] = React.useState("");
     const [data, setData] = React.useState(null);
-
+    const [loading, setLoading] = React.useState(false);
+    
     const create = (values) => {
         return api.post(path.context, values)
         .then(refresh);
@@ -65,14 +67,14 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
         if(path == null){
             return Promise.reject("path not set");
         }
-        
         if(path.id){
             setListData(null);
             return api.get(path.context + "/" + path.id)
             .then((res) => {
                 setData(res.data);
                 setType(path.context.slice(0, -1));
-            });
+            })
+            ;
         }
         setData(null);
         return api.get(path.context)
@@ -89,8 +91,15 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
         setListData(null);
     }
     React.useEffect(() => {
+        setLoading(true);
         if(path){
-            refresh();
+            refresh()
+            .finally(() => {
+                setLoading(false);
+            })
+            .catch(() => {
+
+            });
         }
     }, [path]);
 
@@ -100,6 +109,7 @@ export const DataContextProvider: React.FC<DataContextProviderProps> = ({ childr
             type,
             listData,
             data,
+            loading,
             refresh,
             create,
             get,

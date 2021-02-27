@@ -11,5 +11,7 @@ public interface GitAdapter {
     List<GitProject> listProject() throws GitLabApiException;
     String getFileContent(String project, String fileName);
     List<GitCommit> getHistory(String project);
-    void updateFileContent(String project, String fileName, String content, String message);
+    void commit(String project, String branch, String fileName, String content, String message);
+    void pullRequest(String project, String sourceBranch, String targetBranch);
+
 }

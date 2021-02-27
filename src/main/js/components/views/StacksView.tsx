@@ -9,7 +9,7 @@ import { Stack } from 'types/Stack';
 
 export const StacksView: React.FC = () => {
   const router = useRouter();
-  const { listData } = React.useContext(DataContext);
+  const { listData, loading } = React.useContext(DataContext);
   const onCell = (item, rowIndex) => {
     return { onClick: (event) => router.push('stacks/' + item.id) };
   };
@@ -52,7 +52,7 @@ export const StacksView: React.FC = () => {
     },
   ];
 
-  return <Table columns={columns} dataSource={listData} />;
+  return <Table columns={columns} dataSource={listData} loading={loading} />;
 };
 
 type StackItemProps = {

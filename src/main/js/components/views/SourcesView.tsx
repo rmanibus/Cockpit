@@ -7,8 +7,7 @@ import { DataContext } from 'contexts/DataContext';
 import { Source } from 'types/Source';
 
 export const SourcesView: React.FC = () => {
-  const { listData } = React.useContext(DataContext);
-
+  const { listData, loading } = React.useContext(DataContext);
   const columns = [
     {
       title: 'Name',
@@ -27,9 +26,7 @@ export const SourcesView: React.FC = () => {
     {
       title: 'Location',
       dataIndex: 'location',
-      render: (text) => {
-        text;
-      },
+      render: (text) => text,
     },
     {
       title: 'Action',
@@ -39,7 +36,7 @@ export const SourcesView: React.FC = () => {
   ];
 
   console.log(listData);
-  return <Table columns={columns} dataSource={listData} />;
+  return <Table columns={columns} loading={loading} dataSource={listData} />;
 };
 type SourceItemProps = {
   item: Source;

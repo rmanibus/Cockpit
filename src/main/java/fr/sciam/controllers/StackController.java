@@ -6,11 +6,8 @@ import fr.sciam.adapters.GitAdapter;
 import fr.sciam.model.StackEntity;
 import fr.sciam.services.GitAdapterFactory;
 import fr.sciam.views.StackCreateView;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.gitlab4j.api.GitLabApi;
-import org.gitlab4j.api.GitLabApiClient;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -84,7 +81,16 @@ public class StackController {
             throw new NotFoundException();
         }
         GitAdapter gitAdapter = gitAdapterFactory.getSourceAdapter(stack.getSource());
-        gitAdapter.updateFileContent(stack.getPath(), "docker-compose.yml", new String(Base64.getDecoder().decode(updateCompose.content)), updateCompose.message);
+        switch (stack.getCommitMode()){
+            case GIT_PUSH -> {
+                gitAdapter.commit(stack.getPath(), "master" , "docker-compose.yml", new String(Base64.getDecoder().decode(updateCompose.content)), updateCompose.message);
+            }
+            case PULL_REQUEST -> {
+                gitAdapter.commit(stack.getPath(), "cockpit" , "docker-compose.yml", new String(Base64.getDecoder().decode(updateCompose.content)), updateCompose.message);
+                gitAdapter.pullRequest(stack.getPath(), "cockpit", "master");
+            }
+        }
+
         return Response.ok().build();
     }
 
