@@ -34,11 +34,16 @@ public class SourceController {
     @PUT
     @Transactional
     @Path("{id}")
-    public Response update(@PathParam("id") UUID id, SourceEntity sourceEntity) {
-        if (sourceResource.get(id) == null) {
+    public Response update(@PathParam("id") UUID id, SourceEntity updatedSourceEntity) {
+
+        SourceEntity sourceEntity = sourceResource.get(id);
+        if (sourceEntity == null) {
             throw new NotFoundException();
         }
-        sourceResource.update(id, sourceEntity);
+        if (updatedSourceEntity.getSecret() == null) {
+            updatedSourceEntity.setSecret(sourceEntity.getSecret());
+        }
+        sourceResource.update(id, updatedSourceEntity);
         return Response.ok().build();
     }
 

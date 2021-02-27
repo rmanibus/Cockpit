@@ -2,7 +2,7 @@
 import React from 'react';
 import diff  from 'deep-diff';
 import { Alert } from 'antd';
-import { StackContext, StackContextValue } from '../../contexts/StackContext';
+import { StackContext, StackContextValue } from 'contexts/StackContext';
 
 
 export const ChangesView: React.FC = () => {
