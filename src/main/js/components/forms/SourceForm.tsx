@@ -67,8 +67,8 @@ export const SourceForm: React.FC<SourceFormProps> = ({ data, onFinish }) => {
       <Form.Item name="location" rules={[{ required: true, message: 'Please input source location!' }]}>
         <Input placeholder="Location" />
       </Form.Item>
-      <Form.Item name="secret" rules={[{ required: true, message: 'Please input source secret!' }]}>
-        <Input placeholder="Secret" />
+      <Form.Item name="secret" rules={[{ required: false }]}>
+        <Input.Password placeholder="Secret" />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
