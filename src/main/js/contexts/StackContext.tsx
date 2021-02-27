@@ -14,6 +14,7 @@ export interface StackContextValue {
     networkId?: string;
     update: any;
     save: (message: string) => Promise<any>;
+    refresh: () => Promise<any>;
 }
 
 export const StackContext = React.createContext<StackContextValue>(null);
@@ -114,6 +115,7 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
         <StackContext.Provider
           value={{
             update,
+            refresh,
             save,
             stackId,
             serviceId,

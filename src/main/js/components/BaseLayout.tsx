@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Input, Modal, Layout, Menu, Breadcrumb, Button, Space, PageHeader, Drawer, message } from 'antd';
+import { Popconfirm, Input, Modal, Layout, Menu, Breadcrumb, Button, Space, PageHeader, Drawer, message } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
 import { StackContext, StackContextValue } from 'contexts/StackContext';
 import { ChangesView} from './views/ChangesView';
@@ -26,7 +26,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
   const [changesOpen, setChangeOpen] = React.useState(false);
   const [saveOpen, setSaveOpen] = React.useState(false);
   const [saveMessage, setSaveMessage] = React.useState(null);
-  const { save, stackId } = React.useContext<StackContextValue>(StackContext);
+  const { save, stackId, refresh } = React.useContext<StackContextValue>(StackContext);
 
   const toggle = () => {
     setCollapsed(!collapsed);
@@ -66,6 +66,15 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
   const handleCrumbClick = (target) => () => {
     router.push(target);
   };
+  const discard = () => {
+    refresh()
+    .then(() => {
+      message.success('discarded');
+    })
+    .catch(() => {
+      message.error('failed to discard !');
+    })
+  }
   return (
     <Layout style={{ height: '100vh', width: '100%' }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -114,7 +123,9 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
             <Button onClick={openChanges}>Changes</Button>
             <Space style={{ float: 'right' }}>
               <Button type="primary" onClick={openSave}>Save</Button>
-              <Button danger>Discard</Button>
+              <Popconfirm title="Sure to discard ?" onConfirm={discard}>
+                <Button danger>Discard</Button>
+              </Popconfirm>
             </Space>
           </Footer>
           <Drawer
