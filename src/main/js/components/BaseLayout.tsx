@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Layout, Menu, Breadcrumb, Button, Space, PageHeader, Drawer } from 'antd';
+import { Input, Modal, Layout, Menu, Breadcrumb, Button, Space, PageHeader, Drawer, message } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
 import { StackContext, StackContextValue } from 'contexts/StackContext';
 import { ChangesView} from './views/ChangesView';
@@ -24,17 +24,42 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
   const router = useRouter();
   const [collapsed, setCollapsed] = React.useState(false);
   const [changesOpen, setChangeOpen] = React.useState(false);
-  const { stackId } = React.useContext<StackContextValue>(StackContext);
+  const [saveOpen, setSaveOpen] = React.useState(false);
+  const [saveMessage, setSaveMessage] = React.useState(null);
+  const { save, stackId } = React.useContext<StackContextValue>(StackContext);
 
   const toggle = () => {
     setCollapsed(!collapsed);
   };
+
   const openChanges = () => {
     setChangeOpen(true);
   };
   const closeChanges = () => {
     setChangeOpen(false);
   };
+  const openSave =() =>{
+    setSaveOpen(true);
+  }
+  const closeSave =() => {
+    setSaveOpen(false);
+  }
+  const handleSave = () => {
+    if(!saveMessage){
+      message.error("please set a commit message");
+      return;
+    }
+    save(saveMessage)
+    .then(() => {
+      message.success("saved !")
+    })
+    .catch((e) => {
+      message.error("failed to save !");
+      console.log(e);
+    });
+    setSaveMessage(null);
+    closeSave();
+  }
   const handleMenuClick = (e) => {
     router.push(e.key);
   };
@@ -88,7 +113,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
           <Footer className="site-layout-background">
             <Button onClick={openChanges}>Changes</Button>
             <Space style={{ float: 'right' }}>
-              <Button type="primary">Save</Button>
+              <Button type="primary" onClick={openSave}>Save</Button>
               <Button danger>Discard</Button>
             </Space>
           </Footer>
@@ -102,6 +127,9 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
           >
             <ChangesView/>
           </Drawer>
+            <Modal title="Commit your Changes" visible={saveOpen} onOk={handleSave} onCancel={closeSave}>
+            <Input placeholder="message" value={saveMessage} onChange={(e) => setSaveMessage(e.target.value)} />
+          </Modal>
           </>
         )}
       </Layout>

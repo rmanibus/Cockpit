@@ -7,6 +7,8 @@ import fr.sciam.model.StackEntity;
 import fr.sciam.services.GitAdapterFactory;
 import fr.sciam.views.StackCreateView;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiClient;
 
@@ -16,6 +18,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Base64;
 import java.util.UUID;
 
 @Path("/api/stacks")
@@ -56,7 +59,7 @@ public class StackController {
     @Transactional
     @Path("{id}/compose")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response compose(@PathParam("id") UUID id) {
+    public Response getCompose(@PathParam("id") UUID id) {
         StackEntity stack = StackEntity.findById(id);
         if(stack == null){
             throw new NotFoundException();
@@ -64,6 +67,27 @@ public class StackController {
         GitAdapter gitAdapter = gitAdapterFactory.getSourceAdapter(stack.getSource());
         return Response.ok(gitAdapter.getFileContent(stack.getPath(), "docker-compose.yml")).build();
     }
+
+    @Data
+    @AllArgsConstructor
+    public static class UpdateCompose{
+        String message;
+        String content;
+    }
+
+    @PUT
+    @Transactional
+    @Path("{id}/compose")
+    public Response updateCompose(@PathParam("id") UUID id, UpdateCompose updateCompose) {
+        StackEntity stack = StackEntity.findById(id);
+        if(stack == null){
+            throw new NotFoundException();
+        }
+        GitAdapter gitAdapter = gitAdapterFactory.getSourceAdapter(stack.getSource());
+        gitAdapter.updateFileContent(stack.getPath(), "docker-compose.yml", new String(Base64.getDecoder().decode(updateCompose.content)), updateCompose.message);
+        return Response.ok().build();
+    }
+
     @GET
     @Transactional
     @Path("{id}/history")

@@ -13,6 +13,7 @@ export interface StackContextValue {
     serviceId?: string;
     networkId?: string;
     update: any;
+    save: (message: string) => Promise<any>;
 }
 
 export const StackContext = React.createContext<StackContextValue>(null);
@@ -95,6 +96,16 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
           }
         });
     }
+
+    const save = (message: string) => {
+        if(!stackId){
+            return Promise.reject("path not set");
+        }
+        if(!stack){
+            return Promise.reject("no stack to save");
+        }
+        return api.put('stacks/' + stackId + '/compose', {message, content: btoa(yaml.dump(stack))})
+    }
     const clear = () => {
         setOriginalStack(null);
         setStack(null);
@@ -103,6 +114,7 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
         <StackContext.Provider
           value={{
             update,
+            save,
             stackId,
             serviceId,
             networkId,

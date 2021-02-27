@@ -5,12 +5,14 @@ import fr.sciam.model.GitCommit.Author;
 import fr.sciam.model.GitProject;
 import fr.sciam.model.SourceEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.gitlab4j.api.Constants;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.RepositoryFile;
 
+import javax.ws.rs.InternalServerErrorException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +37,8 @@ public class GitlabAdapter implements GitAdapter {
                     .collect(Collectors.toList());
         } catch (GitLabApiException e) {
             log.error("failed to fetch projects: ", e);
+            throw new InternalServerErrorException(e.getMessage());
         }
-        return Collections.emptyList();
     }
 
     @Override
@@ -46,8 +48,8 @@ public class GitlabAdapter implements GitAdapter {
             return new String(Base64.getDecoder().decode(repoFile.getContent()));
         } catch (GitLabApiException | IllegalArgumentException e) {
             log.error("failed to fetch file content: ", e);
+            throw new InternalServerErrorException(e.getMessage());
         }
-        return "";
     }
 
     public List<GitCommit> getHistory(String project) {
@@ -62,8 +64,21 @@ public class GitlabAdapter implements GitAdapter {
                     .collect(Collectors.toList());
         } catch (GitLabApiException e) {
             log.error("failed to fetch history: ", e);
+            throw new InternalServerErrorException(e.getMessage());
         }
-        return Collections.emptyList();
+    }
+
+    public void updateFileContent(String project, String fileName, String content, String message) {
+        try {
+            RepositoryFile repositoryFile = new RepositoryFile();
+            repositoryFile.setContent(Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8)));
+            repositoryFile.setFilePath(fileName);
+            repositoryFile.setEncoding(Constants.Encoding.BASE64);
+            api.getRepositoryFileApi().updateFile(project, repositoryFile, "master", message);
+        } catch (GitLabApiException e) {
+            log.error("failed to update: ", e);
+            throw new InternalServerErrorException(e.getMessage());
+        }
     }
 
     private GitLabApi createApi(SourceEntity source) {

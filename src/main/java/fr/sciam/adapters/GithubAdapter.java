@@ -27,4 +27,9 @@ public class GithubAdapter implements GitAdapter {
     public List<GitCommit> getHistory(String project) {
         return Collections.emptyList();
     }
+
+    @Override
+    public void updateFileContent(String project, String fileName, String content, String message) {
+
+    }
 }
