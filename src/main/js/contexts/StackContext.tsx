@@ -27,6 +27,7 @@ export type Resource = {
     id?: string;
 }
 export const StackContextProvider: React.FC<StackContextProviderProps> = ({ children }: StackContextProviderProps) => {
+    
     const router = useRouter();
     const { stackId, serviceId, networkId } = router.query;
     const [originalStack, setOriginalStack] = React.useState<DockerStack | null>(null);
@@ -58,6 +59,7 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
     const computeAdded = (stack, added) => {
         return merge(stack, added)
     };
+
     const computeRemoved = (stack, removed) => {
         if(isEmpty(removed)) return stack;
         
