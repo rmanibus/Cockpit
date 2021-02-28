@@ -28,6 +28,9 @@ public class StackEntity extends BaseUuidEntity {
     @ManyToOne
     @JoinColumn(name = "source_id", nullable = false)
     SourceEntity source;
+    @ManyToOne
+    @JoinColumn(name = "docker_id", nullable = true)
+    DockerEntity docker;
 
     public enum StackType {
         COMPOSE,SWARM,K8S

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Popconfirm, Input, Modal, Layout, Menu, Breadcrumb, Button, Space, PageHeader, Drawer, message } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
+import { AimOutlined, MenuUnfoldOutlined, MenuFoldOutlined, SubnodeOutlined, HddOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
 import { StackContext, StackContextValue } from 'contexts/StackContext';
 import { ChangesView} from './views/ChangesView';
 
@@ -88,6 +88,9 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ header, children }) => {
           </Menu.Item>
           <Menu.Item key="/sources" icon={<SubnodeOutlined />}>
             Sources
+          </Menu.Item>
+          <Menu.Item key="/dockers" icon={<AimOutlined />}>
+            Dockers
           </Menu.Item>
           <Menu.Item key="/settings" icon={<SettingOutlined />}>
             Settings

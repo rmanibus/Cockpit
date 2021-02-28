@@ -1,6 +1,8 @@
 package fr.sciam.controllers;
 
+import fr.sciam.model.DockerEntity;
 import fr.sciam.model.SourceEntity;
+import fr.sciam.resources.DockerResource;
 import fr.sciam.resources.SourceResource;
 import fr.sciam.services.GitAdapterFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -13,73 +15,60 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
 
-@Path("/api/sources")
+@Path("/api/dockers")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Slf4j
-public class SourceController {
+public class DockerController {
 
     @Inject
     GitAdapterFactory gitAdapterFactory;
     @Inject
-    SourceResource sourceResource;
+    DockerResource dockerResource;
 
     @POST
     @Transactional
-    public Response create(SourceEntity sourceEntity) {
-        sourceEntity.persist();
+    public Response create(DockerEntity dockerEntity) {
+        dockerEntity.persist();
         return Response.ok().build();
     }
 
     @PUT
     @Transactional
     @Path("{id}")
-    public Response update(@PathParam("id") UUID id, SourceEntity updatedSourceEntity) {
+    public Response update(@PathParam("id") UUID id, DockerEntity updatedDockerEntity) {
 
-        SourceEntity sourceEntity = sourceResource.get(id);
+        DockerEntity sourceEntity = dockerResource.get(id);
         if (sourceEntity == null) {
             throw new NotFoundException();
         }
-        if (updatedSourceEntity.getSecret() == null) {
-            updatedSourceEntity.setSecret(sourceEntity.getSecret());
-        }
-        sourceResource.update(id, updatedSourceEntity);
+        dockerResource.update(id, updatedDockerEntity);
         return Response.ok().build();
     }
 
     @GET
     @Transactional
     public Response list() {
-        return Response.ok(SourceEntity.listAll()).build();
+        return Response.ok(DockerEntity.listAll()).build();
     }
 
     @GET
     @Transactional
     @Path("{id}")
     public Response get(@PathParam("id") UUID id) {
-        SourceEntity source = sourceResource.get(id);
-        if (source == null) {
+        DockerEntity docker = dockerResource.get(id);
+        if (docker == null) {
             throw new NotFoundException();
         }
-        return Response.ok(source).build();
+        return Response.ok(docker).build();
     }
 
-    @GET
-    @Transactional
-    @Path("{id}/projects")
-    public Response listProjects(@PathParam("id") UUID id) throws GitLabApiException {
-        SourceEntity source = sourceResource.get(id);
-        if (source == null) {
-            throw new NotFoundException();
-        }
-        return Response.ok(gitAdapterFactory.getSourceAdapter(source).listProject()).build();
-    }
 
     @DELETE
     @Transactional
     @Path("{id}")
     public Response remove(@PathParam("id") UUID id) {
-        SourceEntity.deleteById(id);
+        dockerResource.delete(id);
         return Response.ok().build();
     }
 }
