@@ -36,7 +36,8 @@ export const NetworkEditor: React.FC = () => {
         <SimpleEditor name="Name" value={networkId} onChange={renameNetwork} />
         <SelectEditor name="Driver" value={network.driver} onChange={updateField('driver')} choices={['overlay', 'bridge']} />
         <SwitchEditor name="Attachable" value={network.attachable} onChange={updateField('attachable')} />
-        <SwitchEditor name="Internal" value={network.internal} onChange={updateField('internal')} /> 
+        <SwitchEditor name="Internal" value={network.internal} onChange={updateField('internal')} />
+        <SwitchEditor name="External" value={network.external} onChange={updateField('external')} />
       </SimpleEditorContainer>
     }
 

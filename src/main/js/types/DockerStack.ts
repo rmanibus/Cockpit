@@ -31,7 +31,7 @@ export interface DockerService {
     environment?: Environment;
     ports?: Array<string | ExposedPort>;
     expose?: Array<string>;
-    volumes?: Array<string | Volume>;
+    volumes?: Array<string | DockerVolume>;
     labels?: Labels;
     healthcheck?: {
         test: Array<string>;
@@ -40,7 +40,8 @@ export interface DockerService {
         retries: number;
         start_period: string;
     }
-    configs: Array<String | Config>;
+    configs: Array<String | DockerConfig>;
+    secrets: Array<String | DockerSecret>;
     logging: {
         driver: string;
         options: {
@@ -88,14 +89,6 @@ export interface DockerService {
 
 }
 
-export interface Config {
-    source: string;
-    target: string;
-    uid?: string;
-    gid?: string;
-    mode?: string;
-}
-
 export type Environment = EnvironmentDict | EnvironmentArray;
 export interface EnvironmentDict {
     [key: string]: string;
@@ -110,7 +103,26 @@ export interface LabelsDict {
 export interface LabelsArray {
     [key: number]: string;
 }
-export interface Volume {
+export interface ExposedPort {
+    target: number;
+    published: number;
+    protocol: string;
+    mode: 'host' | 'ingress';
+}
+export interface DockerConfig {
+    source: string;
+    target: string;
+    uid?: string;
+    gid?: string;
+    mode?: string;
+}
+export interface DockerConfigDef {
+    file?: string;
+    external: boolean;
+    name?: string;
+    template_driver?: 'golang';
+}
+export interface DockerVolume {
     type: "volume" | "bind" | "tmpfs" | "npipe";
     source: string
     target: string
@@ -118,22 +130,21 @@ export interface Volume {
         nocopy: boolean
     } 
 }
-export interface ExposedPort {
-    target: number;
-    published: number;
-    protocol: string;
-    mode: 'host' | 'ingress';
-}
-export interface DockerConfigDef {
-    file: string;
-    external: boolean;
-    name: string;
+export interface DockerVolumeDef {
 }
 
+export interface DockerSecret {
+    source: string;
+    target: string;
+    uid?: string;
+    gid?: string;
+    mode?: string;
+}
 export interface DockerSecretDef {
-    file: string;
+    file?: string;
     external: boolean;
-    name: string;
+    name?: string;
+    template_driver?: 'golang';
 }
 export interface DockerNetwork {
     aliases:  Array<string>;
@@ -144,6 +155,6 @@ export interface DockerNetworkDef {
     driver: string;
     attachable: boolean;
     internal: boolean;
-}
-export interface DockerVolumeDef {
+    name?: string;
+    external: boolean;
 }

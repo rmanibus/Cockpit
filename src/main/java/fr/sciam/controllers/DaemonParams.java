@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @RequestScoped
 @Slf4j
-public class DockerParams {
+public class DaemonParams {
 
     @Inject
     DockerResource dockerResource;

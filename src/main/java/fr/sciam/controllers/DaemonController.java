@@ -1,7 +1,5 @@
 package fr.sciam.controllers;
 
-import fr.sciam.model.DockerEntity;
-import fr.sciam.resources.DockerResource;
 import fr.sciam.services.DockerService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +19,7 @@ public class DaemonController {
     @Inject
     DockerService dockerService;
     @BeanParam
-    DockerParams dockerParams;
+    DaemonParams daemonParams;
 
     @GET
     @Transactional
