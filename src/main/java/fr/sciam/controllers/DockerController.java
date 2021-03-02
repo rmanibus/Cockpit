@@ -23,8 +23,6 @@ import java.util.UUID;
 public class DockerController {
 
     @Inject
-    DockerService dockerService;
-    @Inject
     DockerResource dockerResource;
 
     @POST
@@ -62,28 +60,6 @@ public class DockerController {
             throw new NotFoundException();
         }
         return Response.ok(docker).build();
-    }
-
-    @GET
-    @Transactional
-    @Path("{id}/secrets")
-    public Response secrets(@PathParam("id") UUID id) {
-        DockerEntity docker = dockerResource.get(id);
-        if (docker == null) {
-            throw new NotFoundException();
-        }
-        return Response.ok(dockerService.getSecrets(docker.getLocation())).build();
-    }
-
-    @GET
-    @Transactional
-    @Path("{id}/ping")
-    public Response available(@PathParam("id") UUID id) {
-        DockerEntity docker = dockerResource.get(id);
-        if (docker == null) {
-            throw new NotFoundException();
-        }
-        return Response.ok(dockerService.ping(docker.getLocation())).build();
     }
 
     @DELETE

@@ -35,7 +35,7 @@ export const SecretEditor: React.FC = () => {
     if(!dockerId){
       return;
     }
-    api.get('dockers/' + dockerId + "/secrets")
+    api.get('daemon/' + dockerId + "/secrets")
     .then(res => {
       setExternalSecrets(res.data);
     });

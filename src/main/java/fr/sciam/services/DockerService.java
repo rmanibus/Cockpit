@@ -13,11 +13,15 @@ import io.quarkus.runtime.StartupEvent;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped
 public class DockerService {
+
+    @Inject
+    DockerClient dockerClient;
 
     @Transactional
     protected void init(@Observes StartupEvent e){
@@ -29,25 +33,13 @@ public class DockerService {
         }
     }
 
-    protected DockerClient createClient(String host){
-        DockerClientConfig config = DefaultDockerClientConfig
-                .createDefaultConfigBuilder()
-                .withDockerTlsVerify(false)
-                .withDockerHost(host).build();
-        DockerHttpClient client = new ApacheDockerHttpClient.Builder()
-                .dockerHost(config.getDockerHost())
-                .sslConfig(config.getSSLConfig())
-                .build();
-        return DockerClientImpl.getInstance(config, client);
+    public List<Secret> getSecrets(){
+        return dockerClient.listSecretsCmd().exec();
     }
 
-    public List<Secret> getSecrets(String host){
-        return createClient(host).listSecretsCmd().exec();
-    }
-
-    public boolean ping(String host){
+    public boolean ping(){
         try{
-            createClient(host).pingCmd().exec();
+            dockerClient.pingCmd().exec();
             return true;
         }catch (DockerClientException e){
             return false;

@@ -38,7 +38,7 @@ export const DockerLocationItem: React.FC<SourceItemProps> = ({ item }) => {
   const [available, setAvailable] = React.useState(false);
 
   React.useEffect(() => {
-    api.get('dockers/' + item.id + '/ping')
+    api.get('daemon/' + item.id + '/ping')
     .then((res) => {
       setAvailable(res.data);
     })
