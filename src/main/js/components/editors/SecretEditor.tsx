@@ -8,6 +8,7 @@ import { SelectEditor } from './SelectEditor';
 
 import { useRouter } from 'next/router';
 import api from 'api';
+import { message } from "antd";
 
 export const SecretEditor: React.FC = () => {
   const [secret, setSecret] = React.useState<DockerSecretDef>(null);
@@ -38,6 +39,9 @@ export const SecretEditor: React.FC = () => {
     api.get('daemon/' + dockerId + "/secrets")
     .then(res => {
       setExternalSecrets(res.data);
+    })
+    .catch(() => {
+      message.error('failed to fetch external secrets !');
     });
   },[api, dockerId]);
 
