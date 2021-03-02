@@ -29,6 +29,9 @@ export const SimpleEditorCardContainer: React.FC = ({ children }) => {
       layout="horizontal"
     >
       {[].concat(children).map((item) => {
+        if(!item){
+          return <></>
+        }
         const { name } = item.props;
         return <SimpleEditorItem name={name}>{item}</SimpleEditorItem>;
       })}
@@ -64,6 +67,9 @@ export const SimpleEditorContainer: React.FC = ({ children }) => {
         layout="horizontal"
       >
         {[].concat(children).map((item) => {
+          if(!item){
+            return <></>
+          }
           const { name } = item.props;
           return <SimpleEditorItem name={name}>{item}</SimpleEditorItem>;
         })}

@@ -7,10 +7,12 @@ import { SwitchEditor } from './SwitchEditor';
 import { SelectEditor } from './SelectEditor';
 
 import { useRouter } from 'next/router';
+import api from 'api';
 
 export const SecretEditor: React.FC = () => {
   const [secret, setSecret] = React.useState<DockerSecretDef>(null);
-  const { stack, stackId, secretId, update } = React.useContext<StackContextValue>(StackContext);
+  const [externalSecrets, setExternalSecrets] = React.useState([]);
+  const { stack, stackId, secretId, update, dockerId } = React.useContext<StackContextValue>(StackContext);
   const router = useRouter();
 
   const renameSecret = (newSecretId) => {
@@ -29,12 +31,24 @@ export const SecretEditor: React.FC = () => {
     setSecret(stack.secrets[secretId]);
   }, [stack]);
 
+  React.useEffect(() => {
+    if(!dockerId){
+      return;
+    }
+    api.get('dockers/' + dockerId + "/secrets")
+    .then(res => {
+      setExternalSecrets(res.data);
+    });
+  },[api, dockerId]);
+
   return (
     <> {
       secret && 
       <SimpleEditorContainer>
         <SimpleEditor name="Name" value={secretId} onChange={renameSecret} />
-        <SimpleEditor name="File" value={secret.file} onChange={updateField('file')} />
+        { !secret.external && <SimpleEditor name="File" value={secret.file} onChange={updateField('file')} />}
+        {  secret.external && ! dockerId && <SimpleEditor name="External Name" value={secret.name} onChange={updateField('name')} />}
+        {  secret.external &&   dockerId && <SelectEditor choices={externalSecrets.map(secret => secret.Spec.Name)} name="External Name" value={secret.name} onChange={updateField('name')} />}
         <SwitchEditor name="External" value={secret.external} onChange={updateField('external')} /> 
       </SimpleEditorContainer>
     }

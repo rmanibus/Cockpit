@@ -9,6 +9,7 @@ import { merge, isObject, isArray, compact, isEmpty } from 'lodash';
 export interface StackContextValue {
     originalStack: DockerStack;
     stack : DockerStack;
+    dockerId: string;
     stackId?: string;
     serviceId?: string;
     networkId?: string;
@@ -34,9 +35,7 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
     const { stackId, serviceId, networkId, configId, secretId } = router.query;
     const [originalStack, setOriginalStack] = React.useState<DockerStack | null>(null);
     const [stack, setStack] = React.useState<DockerStack | null>(null);
-    
-
-    const { setPath } = React.useContext<DataContextValue>(DataContext);
+    const { setPath, data, type } = React.useContext<DataContextValue>(DataContext);
 
     React.useEffect(() => {
         if(stackId){
@@ -121,6 +120,7 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
             update,
             refresh,
             save,
+            dockerId: type === 'stack' && data && data.docker && data.docker.id,
             stackId,
             serviceId,
             networkId,

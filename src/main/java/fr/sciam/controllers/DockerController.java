@@ -4,6 +4,7 @@ import fr.sciam.model.DockerEntity;
 import fr.sciam.model.SourceEntity;
 import fr.sciam.resources.DockerResource;
 import fr.sciam.resources.SourceResource;
+import fr.sciam.services.DockerService;
 import fr.sciam.services.GitAdapterFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApiException;
@@ -22,7 +23,7 @@ import java.util.UUID;
 public class DockerController {
 
     @Inject
-    GitAdapterFactory gitAdapterFactory;
+    DockerService dockerService;
     @Inject
     DockerResource dockerResource;
 
@@ -63,6 +64,16 @@ public class DockerController {
         return Response.ok(docker).build();
     }
 
+    @GET
+    @Transactional
+    @Path("{id}/secrets")
+    public Response secrets(@PathParam("id") UUID id) {
+        DockerEntity docker = dockerResource.get(id);
+        if (docker == null) {
+            throw new NotFoundException();
+        }
+        return Response.ok(dockerService.getSecrets(docker.getLocation())).build();
+    }
 
     @DELETE
     @Transactional

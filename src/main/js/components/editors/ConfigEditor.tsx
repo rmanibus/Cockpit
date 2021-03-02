@@ -34,7 +34,8 @@ export const ConfigEditor: React.FC = () => {
       config && 
       <SimpleEditorContainer>
         <SimpleEditor name="Name" value={configId} onChange={renameConfig} />
-        <SimpleEditor name="File" value={config.file} onChange={updateField('file')} />
+        { !config.external && <SimpleEditor name="File" value={config.file} onChange={updateField('file')} />}
+        { config.external && <SimpleEditor name="External Name" value={config.name} onChange={updateField('name')} />}
         <SwitchEditor name="External" value={config.external} onChange={updateField('external')} /> 
       </SimpleEditorContainer>
     }

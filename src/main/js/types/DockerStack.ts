@@ -127,11 +127,13 @@ export interface ExposedPort {
 export interface DockerConfigDef {
     file: string;
     external: boolean;
+    name: string;
 }
 
 export interface DockerSecretDef {
     file: string;
     external: boolean;
+    name: string;
 }
 export interface DockerNetwork {
     aliases:  Array<string>;
