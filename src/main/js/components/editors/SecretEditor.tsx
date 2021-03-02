@@ -52,8 +52,6 @@ export const SecretEditor: React.FC = () => {
         <SwitchEditor name="External" value={secret.external} onChange={updateField('external')} /> 
       </SimpleEditorContainer>
     }
-
-
     </>
   );
 };

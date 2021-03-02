@@ -75,6 +75,17 @@ public class DockerController {
         return Response.ok(dockerService.getSecrets(docker.getLocation())).build();
     }
 
+    @GET
+    @Transactional
+    @Path("{id}/ping")
+    public Response available(@PathParam("id") UUID id) {
+        DockerEntity docker = dockerResource.get(id);
+        if (docker == null) {
+            throw new NotFoundException();
+        }
+        return Response.ok(dockerService.ping(docker.getLocation())).build();
+    }
+
     @DELETE
     @Transactional
     @Path("{id}")

@@ -1,9 +1,11 @@
 import React from 'react';
-import { Table, Space, Button, Tag, message, Drawer, Popconfirm } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+
+import { Table, Space, Button, message, Drawer, Popconfirm } from 'antd';
 import { EditDockerForm } from '../forms/DockerForm';
 import { DataContext } from 'contexts/DataContext';
-import { Source } from 'types/Source';
+import { Docker } from 'types/Docker';
+import api from 'api';
 
 export const DockersView: React.FC = () => {
   const { listData, loading } = React.useContext(DataContext);
@@ -16,7 +18,7 @@ export const DockersView: React.FC = () => {
     {
       title: 'Location',
       dataIndex: 'location',
-      render: (text) => text,
+      render: (text, item) => <DockerLocationItem item={item} />,
     },
     {
       title: 'Action',
@@ -27,24 +29,46 @@ export const DockersView: React.FC = () => {
   return <Table columns={columns} loading={loading} dataSource={listData} />;
 };
 type SourceItemProps = {
-  item: Source;
+  item: Docker;
 };
+
+
+export const DockerLocationItem: React.FC<SourceItemProps> = ({ item }) => {
+
+  const [available, setAvailable] = React.useState(false);
+
+  React.useEffect(() => {
+    api.get('dockers/' + item.id + '/ping')
+    .then((res) => {
+      setAvailable(res.data);
+    })
+  }, [api, item])
+
+  return (
+    <Space>
+    {available ? <CheckCircleOutlined style={{color: 'green'}} />: <CloseCircleOutlined style={{color: 'red'}} />}{item.location}
+    </Space>
+  );
+};
+
 export const DockerItem: React.FC<SourceItemProps> = ({ item }) => {
   const { remove } = React.useContext(DataContext);
 
   const [visible, setVisible] = React.useState(false);
+
   const closeDrawer = () => {
     setVisible(false);
   };
 
   const onRemove = () => {
     remove(item.id)
-      .then(() => message.success('source removed !'))
-      .catch(() => message.error('failed to remove source'));
+      .then(() => message.success('docker removed !'))
+      .catch(() => message.error('failed to remove docker'));
   };
   const onEdit = () => {
     setVisible(true);
   };
+
   return (
     <>
       <Space size="middle">

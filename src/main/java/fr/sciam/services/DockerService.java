@@ -1,6 +1,7 @@
 package fr.sciam.services;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.Secret;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfig;
@@ -42,5 +43,14 @@ public class DockerService {
 
     public List<Secret> getSecrets(String host){
         return createClient(host).listSecretsCmd().exec();
+    }
+
+    public boolean ping(String host){
+        try{
+            createClient(host).pingCmd().exec();
+            return true;
+        }catch (DockerClientException e){
+            return false;
+        }
     }
 }
