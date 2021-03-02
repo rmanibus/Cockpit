@@ -68,6 +68,9 @@ public class DockerController {
     @Transactional
     @Path("{id}")
     public Response remove(@PathParam("id") UUID id) {
+        if(dockerResource.get(id) == null){
+            throw new NotFoundException();
+        }
         dockerResource.delete(id);
         return Response.ok().build();
     }

@@ -5,6 +5,9 @@ export interface DockerStack {
     configs: {
         [key: string]: DockerConfigDef
     };
+    secrets: {
+        [key: string]: DockerSecretDef
+    }
     networks:{
         [key: string]: DockerNetworkDef
     }
@@ -122,6 +125,11 @@ export interface ExposedPort {
     mode: 'host' | 'ingress';
 }
 export interface DockerConfigDef {
+    file: string;
+    external: boolean;
+}
+
+export interface DockerSecretDef {
     file: string;
     external: boolean;
 }

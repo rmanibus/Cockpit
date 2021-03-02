@@ -79,7 +79,10 @@ public class SourceController {
     @Transactional
     @Path("{id}")
     public Response remove(@PathParam("id") UUID id) {
-        SourceEntity.deleteById(id);
+        if(sourceResource.get(id) == null){
+            throw new NotFoundException();
+        }
+        sourceResource.delete(id);
         return Response.ok().build();
     }
 }

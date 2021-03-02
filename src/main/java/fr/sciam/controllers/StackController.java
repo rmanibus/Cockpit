@@ -33,6 +33,9 @@ public class StackController {
     @Transactional
     @Path("{id}")
     public Response update(@PathParam("id") UUID id, StackEntity entity) {
+        if(stackResource.get(id) == null){
+            throw new NotFoundException();
+        }
         stackResource.update(id, entity);
         return Response.ok().build();
     }
@@ -55,7 +58,7 @@ public class StackController {
     @Path("{id}/compose")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getCompose(@PathParam("id") UUID id) {
-        StackEntity stack = StackEntity.findById(id);
+        StackEntity stack = stackResource.get(id);
         if (stack == null) {
             throw new NotFoundException();
         }
@@ -74,7 +77,7 @@ public class StackController {
     @Transactional
     @Path("{id}/compose")
     public Response updateCompose(@PathParam("id") UUID id, UpdateCompose updateCompose) {
-        StackEntity stack = StackEntity.findById(id);
+        StackEntity stack = stackResource.get(id);
         if (stack == null) {
             throw new NotFoundException();
         }
@@ -96,7 +99,7 @@ public class StackController {
     @Transactional
     @Path("{id}/history")
     public Response history(@PathParam("id") UUID id) {
-        StackEntity stack = StackEntity.findById(id);
+        StackEntity stack = stackResource.get(id);
         if (stack == null) {
             throw new NotFoundException();
         }
@@ -108,7 +111,10 @@ public class StackController {
     @Transactional
     @Path("{id}")
     public Response remove(@PathParam("id") UUID id) {
-        StackEntity.deleteById(id);
+        if(stackResource.get(id) == null){
+            throw new NotFoundException();
+        }
+        stackResource.delete(id);
         return Response.ok().build();
     }
 
