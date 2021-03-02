@@ -19,7 +19,7 @@ export const EditStackForm: React.FC<EditStackFormProps> = ({ id, afterFinish })
         return clearData;
     }, [id])
     const onFinish = (values: any) => {
-        edit(values, id)
+        edit({...values, docker: values.docker || null }, id)
         .then(afterFinish)
         .then(() => message.success('stack edited !'))
         .catch((e) => {
@@ -40,8 +40,8 @@ export const CreateStackForm: React.FC<CreateStackFormProps> = ({ afterFinish })
     const onFinish = (values: any) => {
       create(values)
         .then(afterFinish)
-        .then(() => message.success('source created !'))
-        .catch(() => message.error('failed to create source !'));
+        .then(() => message.success('stack created !'))
+        .catch(() => message.error('failed to create stack !'));
     };
     return <StackForm onFinish={onFinish}/>
 }
@@ -53,10 +53,12 @@ type StackFormProps = {
   
 export const StackForm: React.FC<StackFormProps> = ({ data, onFinish }) => {
   const [sources, setSources] = React.useState([]);
+  const [dockers, setDockers] = React.useState([]);
   const [ sourceId, setSourceId ] = React.useState(null);
   const [ projects, setProjects ] = React.useState([]);
 
   const [form] = Form.useForm();
+
   React.useEffect(() => {
     api.get('sources')
     .then(res => {
@@ -65,7 +67,18 @@ export const StackForm: React.FC<StackFormProps> = ({ data, onFinish }) => {
   },[api]);
 
   React.useEffect(() => {
-    form && data && form.setFieldsValue({...data, source: data.source.id});
+    api.get('dockers')
+    .then(res => {
+      setDockers(res.data);
+    });
+  },[api]);
+
+  React.useEffect(() => {
+    form && data && form.setFieldsValue({
+      ...data, 
+      source: data.source.id,
+      docker: data.docker && data.docker.id
+    });
     data && setSourceId(data.source.id);
   },[form, data]);
 
@@ -87,6 +100,11 @@ export const StackForm: React.FC<StackFormProps> = ({ data, onFinish }) => {
       <Form.Item name="source" rules={[{ required: true, message: 'Please input stack source !' }]}>
         <Select placeholder="Please select a source" onChange={setSourceId}>
             {sources.map((source) => <Option value={source.id}>{React.createElement(sourceTypes[source.type].icon)} {source.name}</Option>)};
+        </Select>
+      </Form.Item>
+      <Form.Item name="docker">
+        <Select placeholder="Please select a docker" allowClear>
+            {dockers.map((docker) => <Option value={docker.id}>{docker.name}</Option>)};
         </Select>
       </Form.Item>
       <Form.Item name="path" rules={[{ required: true, message: 'Please input stack project !' }]}>

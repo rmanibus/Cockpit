@@ -4,17 +4,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(of = {}, callSuper=true)
+@NoArgsConstructor
 public class SourceEntity extends BaseUuidEntity {
-
+    public SourceEntity(String id){
+        this.id = UUID.fromString(id);
+    }
     @Enumerated(EnumType.STRING)
     SourceType type;
     @Column(length = 255)
