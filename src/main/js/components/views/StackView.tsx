@@ -2,8 +2,8 @@ import React from 'react';
 import { VolumesListView } from './VolumesListView';
 import { ServicesListView } from './ServicesListView';
 import { NetworksListView } from './NetworksListView';
-import { ConfigListView } from './ConfigListView';
-import { SecretListView } from './SecretListView';
+import { ConfigsListView } from './ConfigsListView';
+import { SecretsListView } from './SecretsListView';
 
 export const StackView: React.FC = () => {
 
@@ -12,8 +12,8 @@ export const StackView: React.FC = () => {
       <ServicesListView />
       <VolumesListView />
       <NetworksListView />
-      <ConfigListView />
-      <SecretListView />
+      <ConfigsListView />
+      <SecretsListView />
     </>
   );
 };

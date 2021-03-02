@@ -12,6 +12,8 @@ export interface StackContextValue {
     stackId?: string;
     serviceId?: string;
     networkId?: string;
+    configId?: string;
+    secretId?: string;
     update: any;
     save: (message: string) => Promise<any>;
     refresh: () => Promise<any>;
@@ -29,7 +31,7 @@ export type Resource = {
 export const StackContextProvider: React.FC<StackContextProviderProps> = ({ children }: StackContextProviderProps) => {
     
     const router = useRouter();
-    const { stackId, serviceId, networkId } = router.query;
+    const { stackId, serviceId, networkId, configId, secretId } = router.query;
     const [originalStack, setOriginalStack] = React.useState<DockerStack | null>(null);
     const [stack, setStack] = React.useState<DockerStack | null>(null);
     
@@ -122,6 +124,8 @@ export const StackContextProvider: React.FC<StackContextProviderProps> = ({ chil
             stackId,
             serviceId,
             networkId,
+            secretId,
+            configId,
             stack,
             originalStack
           }}

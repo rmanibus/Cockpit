@@ -4,12 +4,12 @@ import { Table, Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { StackContext, StackContextValue } from 'contexts/StackContext';
 
-export const SecretListView: React.FC = () => {
+export const ConfigsListView: React.FC = () => {
   const { stack, stackId } = React.useContext<StackContextValue>(StackContext);
   const router = useRouter();
 
   const onCell = (item, rowIndex) => {
-    return { onClick: (event) => router.push('/stacks/' + stackId + '/secret/' + item.name) };
+    return { onClick: (event) => router.push('/stacks/' + stackId + '/configs/' + item.name) };
   };
   const columns = [
     {
@@ -28,10 +28,10 @@ export const SecretListView: React.FC = () => {
   return (
     <>
       <Button style={{ float: 'right' }} type="primary" shape="circle" icon={<PlusOutlined />} />
-      <h2>Secrets</h2>
+      <h2>Configs</h2>
       <Table
         columns={columns}
-        dataSource={Object.entries(stack.secrets).map(([key, value]) => {
+        dataSource={Object.entries(stack.configs).map(([key, value]) => {
           return { name: key };
         })}
       />
