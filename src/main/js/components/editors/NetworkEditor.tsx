@@ -58,7 +58,7 @@ export const NetworkEditor: React.FC = () => {
         { ! network.external &&<SwitchEditor name="Attachable" value={network.attachable} onChange={updateField('attachable')} />}
         { ! network.external && <SwitchEditor name="Internal" value={network.internal} onChange={updateField('internal')} />}
         {  network.external && ! dockerId && <SimpleEditor name="External Name" value={network.name} onChange={updateField('name')} />}
-        {  network.external &&   dockerId && <SelectEditor choices={externalNetworks.map(secret => secret.Spec.Name)} name="External Name" value={network.name} onChange={updateField('name')} />}
+        {  network.external &&   dockerId && <SelectEditor choices={externalNetworks.map(net => net.Name)} name="External Name" value={network.name} onChange={updateField('name')} />}
         <SwitchEditor name="External" value={network.external} onChange={updateField('external')} />
       </SimpleEditorContainer>
     }

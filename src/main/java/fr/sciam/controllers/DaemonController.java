@@ -27,7 +27,12 @@ public class DaemonController {
     public Response secrets(@PathParam("id") UUID id) {
         return Response.ok(dockerService.getSecrets()).build();
     }
-
+    @GET
+    @Transactional
+    @Path("networks")
+    public Response networks(@PathParam("id") UUID id) {
+        return Response.ok(dockerService.getNetworks()).build();
+    }
     @GET
     @Transactional
     @Path("ping")

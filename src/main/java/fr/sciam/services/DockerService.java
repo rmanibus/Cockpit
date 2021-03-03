@@ -2,12 +2,8 @@ package fr.sciam.services;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.DockerClientException;
+import com.github.dockerjava.api.model.Network;
 import com.github.dockerjava.api.model.Secret;
-import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
-import com.github.dockerjava.transport.DockerHttpClient;
 import fr.sciam.model.DockerEntity;
 import io.quarkus.runtime.StartupEvent;
 
@@ -44,5 +40,9 @@ public class DockerService {
         }catch (DockerClientException e){
             return false;
         }
+    }
+
+    public List<Network> getNetworks(){
+        return dockerClient.listNetworksCmd().exec();
     }
 }
