@@ -1,17 +1,20 @@
 package fr.sciam.services;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback.Adapter;
 import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.*;
 import fr.sciam.model.DockerEntity;
 import io.quarkus.runtime.StartupEvent;
+import io.smallrye.mutiny.Multi;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.function.Consumer;
 
 @ApplicationScoped
 public class DockerService {
@@ -20,8 +23,8 @@ public class DockerService {
     DockerClient dockerClient;
 
     @Transactional
-    protected void init(@Observes StartupEvent e){
-        if(DockerEntity.listAll().size() == 0){
+    protected void init(@Observes StartupEvent e) {
+        if (DockerEntity.listAll().size() == 0) {
             DockerEntity entity = new DockerEntity();
             entity.setName("Default");
             entity.setLocation("unix:///var/run/docker.sock");
@@ -29,32 +32,57 @@ public class DockerService {
         }
     }
 
-    public List<Secret> getSecrets(){
+    public List<Secret> getSecrets() {
         return dockerClient.listSecretsCmd().exec();
     }
-    public List<Network> getNetworks(){
+
+    public List<Network> getNetworks() {
         return dockerClient.listNetworksCmd().exec();
     }
-    public List<Task> getTasks(){
+
+    public List<Task> getTasks() {
         return dockerClient.listTasksCmd().exec();
     }
-    public List<Service> getServices(){
+
+    public List<Service> getServices() {
         return dockerClient.listServicesCmd().exec();
     }
-    public List<Container> getContainers(){
+
+    public List<Container> getContainers() {
         return dockerClient.listContainersCmd().exec();
     }
-    public List<InspectVolumeResponse> getVolumes(){
+
+    public List<InspectVolumeResponse> getVolumes() {
         return dockerClient.listVolumesCmd().exec().getVolumes();
     }
-    public boolean ping(){
-        try{
+
+    public boolean ping() {
+        try {
             dockerClient.pingCmd().exec();
             return true;
-        }catch (DockerClientException e){
+        } catch (DockerClientException e) {
             return false;
         }
     }
 
+    public Multi<Frame> getLogs(String id) {
+        return Multi.createFrom().emitter(em -> {
+            dockerClient.logServiceCmd(id)
+                    .withFollow(true)
+                    .withStdout(true)
+                    .withStderr(true)
+                    .exec(new LogCallback(em::emit));
+        });
+    }
 
+    static class LogCallback extends Adapter<Frame> {
+        Consumer<Frame> consumer;
+        LogCallback(Consumer<Frame> consumer){
+            this.consumer = consumer;
+        }
+        @Override
+        public void onNext(Frame frame) {
+            consumer.accept(frame);
+        }
+    }
 }
