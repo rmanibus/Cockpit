@@ -12,6 +12,7 @@ public class JacksonCustomizer implements ObjectMapperCustomizer {
 
     @Override
     public void customize(ObjectMapper mapper) {
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         mapper.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
     }

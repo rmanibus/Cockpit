@@ -1,9 +1,9 @@
 import React from 'react';
-import { VolumesListView } from './VolumesListView';
-import { ServicesListView } from './ServicesListView';
-import { NetworksListView } from './NetworksListView';
-import { ConfigsListView } from './ConfigsListView';
-import { SecretsListView } from './SecretsListView';
+import { VolumesListView } from './stack/VolumesListView';
+import { ServicesListView } from './stack/ServicesListView';
+import { NetworksListView } from './stack/NetworksListView';
+import { ConfigsListView } from './stack/ConfigsListView';
+import { SecretsListView } from './stack/SecretsListView';
 
 export const StackView: React.FC = () => {
 

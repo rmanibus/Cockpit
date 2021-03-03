@@ -1,9 +1,9 @@
 package fr.sciam.services;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
-import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.api.model.Secret;
+import com.github.dockerjava.api.model.*;
 import fr.sciam.model.DockerEntity;
 import io.quarkus.runtime.StartupEvent;
 
@@ -32,7 +32,21 @@ public class DockerService {
     public List<Secret> getSecrets(){
         return dockerClient.listSecretsCmd().exec();
     }
-
+    public List<Network> getNetworks(){
+        return dockerClient.listNetworksCmd().exec();
+    }
+    public List<Task> getTasks(){
+        return dockerClient.listTasksCmd().exec();
+    }
+    public List<Service> getServices(){
+        return dockerClient.listServicesCmd().exec();
+    }
+    public List<Container> getContainers(){
+        return dockerClient.listContainersCmd().exec();
+    }
+    public List<InspectVolumeResponse> getVolumes(){
+        return dockerClient.listVolumesCmd().exec().getVolumes();
+    }
     public boolean ping(){
         try{
             dockerClient.pingCmd().exec();
@@ -42,7 +56,5 @@ public class DockerService {
         }
     }
 
-    public List<Network> getNetworks(){
-        return dockerClient.listNetworksCmd().exec();
-    }
+
 }

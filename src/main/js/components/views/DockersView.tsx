@@ -1,4 +1,6 @@
 import React from 'react';
+import { useRouter } from 'next/router';
+
 import { DeleteOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 import { Table, Space, Button, message, Drawer, Popconfirm } from 'antd';
@@ -8,14 +10,20 @@ import { Docker } from 'types/Docker';
 import api from 'api';
 
 export const DockersView: React.FC = () => {
+  const router = useRouter();
   const { listData, loading } = React.useContext(DataContext);
+  const onCell = (item, rowIndex) => {
+    return { onClick: (event) => router.push('dockers/' + item.id) };
+  };
   const columns = [
     {
+      onCell: onCell,
       title: 'Name',
       dataIndex: 'name',
       render: (text) => <a>{text}</a>,
     },
     {
+      onCell: onCell,
       title: 'Location',
       dataIndex: 'location',
       render: (text, item) => <DockerLocationItem item={item} />,
@@ -42,7 +50,7 @@ export const DockerLocationItem: React.FC<SourceItemProps> = ({ item }) => {
     .then((res) => {
       setAvailable(res.data);
     })
-  }, [api, item])
+  }, [api, item]);
 
   return (
     <Space>

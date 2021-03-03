@@ -35,8 +35,32 @@ public class DaemonController {
     }
     @GET
     @Transactional
+    @Path("tasks")
+    public Response tasks(@PathParam("id") UUID id) {
+        return Response.ok(dockerService.getTasks()).build();
+    }
+    @GET
+    @Transactional
+    @Path("services")
+    public Response services(@PathParam("id") UUID id) {
+        return Response.ok(dockerService.getServices()).build();
+    }
+    @GET
+    @Transactional
+    @Path("containers")
+    public Response containers(@PathParam("id") UUID id) {
+        return Response.ok(dockerService.getContainers()).build();
+    }
+    @GET
+    @Transactional
+    @Path("volumes")
+    public Response volumes(@PathParam("id") UUID id) {
+        return Response.ok(dockerService.getVolumes()).build();
+    }
+    @GET
+    @Transactional
     @Path("ping")
-    public Response available(@PathParam("id") UUID id) {
+    public Response ping(@PathParam("id") UUID id) {
         return Response.ok(dockerService.ping()).build();
     }
 
