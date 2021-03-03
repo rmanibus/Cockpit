@@ -1,13 +1,18 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { message, Table, Space } from 'antd';
 import api from 'api';
 import { DaemonProps } from './types';
 
 export const ServicesListView: React.FC<DaemonProps> = ({ dockerId }: DaemonProps) => {
+  const router = useRouter();
   const [service, setServices] = React.useState([]);
+  const onCell = (item, rowIndex) => {
+    return { onClick: (event) => router.push('/dockers/' + dockerId + '/services/' + item.id) };
+  };
 
   React.useEffect(() => {
-    api
+    dockerId && api
       .get('daemon/' + dockerId + '/services')
       .then((res) => {
         setServices(res.data);
@@ -19,6 +24,7 @@ export const ServicesListView: React.FC<DaemonProps> = ({ dockerId }: DaemonProp
 
   const servicesColumns = [
     {
+      onCell: onCell,
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
@@ -36,7 +42,7 @@ export const ServicesListView: React.FC<DaemonProps> = ({ dockerId }: DaemonProp
       <Table
         columns={servicesColumns}
         dataSource={service.map((service) => {
-          return { name: service.Spec.Name };
+          return { id: service.ID, name: service.Spec.Name };
         })}
       />
     </>

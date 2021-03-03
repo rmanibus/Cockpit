@@ -26,35 +26,35 @@ public class DaemonController {
     @GET
     @Transactional
     @Path("secrets")
-    public Response secrets(@PathParam("id") UUID id) {
+    public Response secrets() {
         return Response.ok(dockerService.getSecrets()).build();
     }
 
     @GET
     @Transactional
     @Path("networks")
-    public Response networks(@PathParam("id") UUID id) {
+    public Response networks() {
         return Response.ok(dockerService.getNetworks()).build();
     }
 
     @GET
     @Transactional
     @Path("tasks")
-    public Response tasks(@PathParam("id") UUID id) {
+    public Response tasks() {
         return Response.ok(dockerService.getTasks()).build();
     }
 
     @GET
     @Transactional
     @Path("services")
-    public Response services(@PathParam("id") UUID id) {
+    public Response services() {
         return Response.ok(dockerService.getServices()).build();
     }
 
     @GET
     @Transactional
     @Path("containers")
-    public Response containers(@PathParam("id") UUID id) {
+    public Response containers() {
         return Response.ok(dockerService.getContainers()).build();
     }
 
@@ -70,6 +70,12 @@ public class DaemonController {
     @Path("ping")
     public Response ping() {
         return Response.ok(dockerService.ping()).build();
+    }
+
+    @GET
+    @Path("services/{serviceId}")
+    public Response service(@PathParam("serviceId") String serviceId) {
+        return Response.ok(dockerService.getService(serviceId)).build();
     }
 
     @GET

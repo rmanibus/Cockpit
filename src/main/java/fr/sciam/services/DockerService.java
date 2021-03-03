@@ -47,7 +47,9 @@ public class DockerService {
     public List<Service> getServices() {
         return dockerClient.listServicesCmd().exec();
     }
-
+    public Service getService(String serviceId) {
+        return dockerClient.inspectServiceCmd(serviceId).exec();
+    }
     public List<Container> getContainers() {
         return dockerClient.listContainersCmd().exec();
     }
