@@ -1,7 +1,8 @@
 import React from 'react';
-import { message, Space } from 'antd';
+import { message } from 'antd';
 import api from 'api';
 import { ServiceProps } from './types';
+import { LogsView } from './services/LogsView';
 
 export const ServiceView: React.FC<ServiceProps> = ({ dockerId, serviceId }: ServiceProps) => {
   const [service, setService] = React.useState(null);
@@ -22,6 +23,7 @@ export const ServiceView: React.FC<ServiceProps> = ({ dockerId, serviceId }: Ser
     <>
       <h2>{service && service.Spec.Name}</h2>
         {service && service.CreatedAt}<br/>
+        <LogsView dockerId={dockerId} serviceId={serviceId} />
         
     </>
   );

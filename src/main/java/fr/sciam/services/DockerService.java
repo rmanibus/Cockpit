@@ -8,6 +8,7 @@ import com.github.dockerjava.api.model.*;
 import fr.sciam.model.DockerEntity;
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.Multi;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @ApplicationScoped
+@Slf4j
 public class DockerService {
 
     @Inject
@@ -70,7 +72,7 @@ public class DockerService {
     public Multi<Frame> getLogs(String id) {
         return Multi.createFrom().emitter(em -> {
             dockerClient.logServiceCmd(id)
-                    .withFollow(true)
+                    .withFollow(false)
                     .withStdout(true)
                     .withStderr(true)
                     .exec(new LogCallback(em::emit));
@@ -84,6 +86,7 @@ public class DockerService {
         }
         @Override
         public void onNext(Frame frame) {
+            log.info("frame: {}", new String(frame.getPayload()));
             consumer.accept(frame);
         }
     }

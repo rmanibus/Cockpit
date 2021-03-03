@@ -1,13 +1,13 @@
 import React from 'react';
 import { message, Table, Space } from 'antd';
 import api from 'api';
-import { DaemonProps } from './type';
+import { DaemonProps } from './types';
 
 export const ContainersListView: React.FC<DaemonProps> = ({ dockerId }: DaemonProps) => {
   const [containers, setContainers] = React.useState([]);
 
   React.useEffect(() => {
-    api
+    dockerId && api
       .get('daemon/' + dockerId + '/containers')
       .then((res) => {
         setContainers(res.data);

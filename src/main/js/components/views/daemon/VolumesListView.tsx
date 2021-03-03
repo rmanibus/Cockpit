@@ -8,7 +8,7 @@ export const VolumesListView: React.FC<DaemonProps> = ({ dockerId }: DaemonProps
   const [volumes, setVolumes] = React.useState([]);
 
   React.useEffect(() => {
-    api
+    dockerId && api
       .get('daemon/' + dockerId + '/volumes')
       .then((res) => {
         setVolumes(res.data);

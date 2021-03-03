@@ -10,7 +10,9 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.UUID;
+import io.vertx.mutiny.core.Vertx;
+
+import java.util.Date;
 
 @Path("/api/daemon/{id}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -18,6 +20,8 @@ import java.util.UUID;
 @Slf4j
 public class DaemonController {
 
+    @Inject
+    Vertx vertx;
     @Inject
     DockerService dockerService;
     @BeanParam
