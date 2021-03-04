@@ -1,6 +1,5 @@
 package fr.sciam.controllers;
 
-import com.github.dockerjava.api.model.Frame;
 import fr.sciam.services.DockerService;
 import io.smallrye.mutiny.Multi;
 import lombok.extern.slf4j.Slf4j;
@@ -12,16 +11,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import io.vertx.mutiny.core.Vertx;
 
-import java.util.Date;
-
 @Path("/api/daemon/{id}")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Slf4j
 public class DaemonController {
-
-    @Inject
-    Vertx vertx;
+    
     @Inject
     DockerService dockerService;
     @BeanParam
@@ -86,7 +81,7 @@ public class DaemonController {
     @Path("logs/{serviceId}")
     @Produces(MediaType.SERVER_SENT_EVENTS)
     public Multi<String> logs(@PathParam("serviceId") String serviceId) {
-        return dockerService.getLogs(serviceId);
+        return dockerService.getServiceLogs(serviceId);
     }
 
 }

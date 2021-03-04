@@ -3,6 +3,7 @@ package fr.sciam.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback.Adapter;
+import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.InspectVolumeResponse;
 import com.github.dockerjava.api.exception.DockerClientException;
 import com.github.dockerjava.api.model.*;
@@ -43,7 +44,9 @@ public class DockerService {
     public List<Network> getNetworks() {
         return dockerClient.listNetworksCmd().exec();
     }
-
+    public Network getNetwork(String networkId) {
+        return dockerClient.inspectNetworkCmd().withNetworkId(networkId).exec();
+    }
     public List<Task> getTasks() {
         return dockerClient.listTasksCmd().exec();
     }
@@ -57,11 +60,15 @@ public class DockerService {
     public List<Container> getContainers() {
         return dockerClient.listContainersCmd().exec();
     }
-
+    public InspectContainerResponse getContainer(String containerId) {
+        return dockerClient.inspectContainerCmd(containerId).exec();
+    }
     public List<InspectVolumeResponse> getVolumes() {
         return dockerClient.listVolumesCmd().exec().getVolumes();
     }
-
+    public InspectVolumeResponse getVolume(String volumeName) {
+        return dockerClient.inspectVolumeCmd(volumeName).exec();
+    }
     public boolean ping() {
         try {
             dockerClient.pingCmd().exec();
@@ -70,8 +77,7 @@ public class DockerService {
             return false;
         }
     }
-
-    public Multi<String> getLogs(String id) {
+    public Multi<String> getServiceLogs(String id) {
         return Multi.createFrom().emitter(em -> {
             dockerClient.logServiceCmd(id)
                     .withFollow(false)
@@ -81,7 +87,15 @@ public class DockerService {
         });
     }
 
-
+    public Multi<String> getContainerLogs(String containerId) {
+        return Multi.createFrom().emitter(em -> {
+            dockerClient.logContainerCmd(containerId)
+                    .withFollowStream(true)
+                    .withStdOut(true)
+                    .withStdErr(true)
+                    .exec(new LogCallback(em::emit));
+        });
+    }
     static class LogCallback extends Adapter<Frame> {
 
         ObjectMapper objectMapper;
