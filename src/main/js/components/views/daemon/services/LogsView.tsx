@@ -8,7 +8,7 @@ export const LogsView: React.FC<ServiceProps> = ({ dockerId, serviceId }: Servic
   React.useEffect(() => {
     if(dockerId && serviceId){
         // rewrites does not work with SSR ...
-        const sse = new EventSource('http://localhost:8080/api/daemon/' + dockerId + '/logs/' + serviceId, {withCredentials: false});
+        const sse = new EventSource('http://localhost:8080/api/daemon/' + dockerId + '/services/' + serviceId + '/logs', {withCredentials: false});
         sse.onmessage = event => {
             ref.current = [...ref.current, JSON.parse(event.data)];
             setLogs(ref.current);

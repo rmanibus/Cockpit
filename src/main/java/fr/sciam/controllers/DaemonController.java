@@ -16,59 +16,61 @@ import io.vertx.mutiny.core.Vertx;
 @Consumes(MediaType.APPLICATION_JSON)
 @Slf4j
 public class DaemonController {
-    
+
     @Inject
     DockerService dockerService;
     @BeanParam
     DaemonParams daemonParams;
 
     @GET
-    @Transactional
     @Path("secrets")
     public Response secrets() {
         return Response.ok(dockerService.getSecrets()).build();
     }
 
     @GET
-    @Transactional
     @Path("networks")
     public Response networks() {
         return Response.ok(dockerService.getNetworks()).build();
     }
 
     @GET
-    @Transactional
     @Path("tasks")
     public Response tasks() {
         return Response.ok(dockerService.getTasks()).build();
     }
 
     @GET
-    @Transactional
     @Path("services")
     public Response services() {
         return Response.ok(dockerService.getServices()).build();
     }
 
     @GET
-    @Transactional
     @Path("containers")
     public Response containers() {
         return Response.ok(dockerService.getContainers()).build();
     }
-
     @GET
-    @Transactional
+    @Path("containers/{containerId}")
+    public Response container(@PathParam("containerId") String containerId) {
+        return Response.ok(dockerService.getContainer(containerId)).build();
+    }
+    @GET
+    @Path("containers/{containerId}/logs")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    public Multi<String> containerLogs(@PathParam("containerId") String containerId) {
+        return dockerService.getContainerLogs(containerId);
+    }
+    @GET
     @Path("volumes")
     public Response volumes() {
         return Response.ok(dockerService.getVolumes()).build();
     }
-
     @GET
-    @Transactional
-    @Path("ping")
-    public Response ping() {
-        return Response.ok(dockerService.ping()).build();
+    @Path("volumes/{volumeName}")
+    public Response volume(@PathParam("volumeName") String volumeName) {
+        return Response.ok(dockerService.getVolume(volumeName)).build();
     }
 
     @GET
@@ -78,10 +80,15 @@ public class DaemonController {
     }
 
     @GET
-    @Path("logs/{serviceId}")
+    @Path("services/{serviceId}/logs")
     @Produces(MediaType.SERVER_SENT_EVENTS)
-    public Multi<String> logs(@PathParam("serviceId") String serviceId) {
+    public Multi<String> serviceLogs(@PathParam("serviceId") String serviceId) {
         return dockerService.getServiceLogs(serviceId);
     }
-
+    @GET
+    @Transactional
+    @Path("ping")
+    public Response ping() {
+        return Response.ok(dockerService.ping()).build();
+    }
 }
