@@ -85,7 +85,7 @@ public class DaemonController {
     @GET
     @Path("logs/{serviceId}")
     @Produces(MediaType.SERVER_SENT_EVENTS)
-    public Multi<Frame> logs(@PathParam("serviceId") String serviceId) {
+    public Multi<String> logs(@PathParam("serviceId") String serviceId) {
         return dockerService.getLogs(serviceId);
     }
 

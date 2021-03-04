@@ -1,5 +1,6 @@
 package fr.sciam.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback.Adapter;
 import com.github.dockerjava.api.command.InspectVolumeResponse;
@@ -8,6 +9,7 @@ import com.github.dockerjava.api.model.*;
 import fr.sciam.model.DockerEntity;
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.Multi;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -69,7 +71,7 @@ public class DockerService {
         }
     }
 
-    public Multi<Frame> getLogs(String id) {
+    public Multi<String> getLogs(String id) {
         return Multi.createFrom().emitter(em -> {
             dockerClient.logServiceCmd(id)
                     .withFollow(false)
@@ -79,15 +81,20 @@ public class DockerService {
         });
     }
 
+
     static class LogCallback extends Adapter<Frame> {
-        Consumer<Frame> consumer;
-        LogCallback(Consumer<Frame> consumer){
+
+        ObjectMapper objectMapper;
+
+        Consumer<String> consumer;
+        LogCallback(Consumer<String> consumer){
             this.consumer = consumer;
+            objectMapper = new ObjectMapper();
         }
+        @SneakyThrows
         @Override
         public void onNext(Frame frame) {
-            log.info("frame: {}", new String(frame.getPayload()));
-            consumer.accept(frame);
+            consumer.accept(objectMapper.writeValueAsString(frame));
         }
     }
 }
