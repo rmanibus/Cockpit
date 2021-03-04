@@ -24,7 +24,7 @@ export const LogsView: React.FC<ServiceProps> = ({ dockerId, serviceId }: Servic
 
   return (
     <>
-    <h2>Logs</h2>
+    <h3>Logs</h3>
     <div style={{padding: '10px', backgroundColor: 'black', color: 'white', maxHeight: '40vh', overflow: 'auto'}}>
     {logs.map(log => <>{atob(log.payload)} <br/></>)}
     </div>

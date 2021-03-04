@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 import { DeleteOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
-import { Table, Space, Button, message, Drawer, Popconfirm } from 'antd';
+import { Tag, Table, Space, Button, message, Drawer, Popconfirm } from 'antd';
 import { EditDockerForm } from '../forms/DockerForm';
 import { DataContext } from 'contexts/DataContext';
 import { Docker } from 'types/Docker';
@@ -54,7 +54,7 @@ export const DockerLocationItem: React.FC<SourceItemProps> = ({ item }) => {
 
   return (
     <Space>
-    {available ? <CheckCircleOutlined style={{color: 'green'}} />: <CloseCircleOutlined style={{color: 'red'}} />}{item.location}
+    {available ? <CheckCircleOutlined style={{color: 'green'}} />: <CloseCircleOutlined style={{color: 'red'}} />}<Tag>{item.location}</Tag>
     </Space>
   );
 };
